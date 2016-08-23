@@ -1,10 +1,7 @@
 from mpi4py import MPI
 import tensorflow as tf
 import numpy as np
-import time
-import math
 import sys
-import getopt
 import resource
 import os
 
@@ -24,7 +21,6 @@ intra_threads = 0
 filename = None
 valid_pct = 0.1
 test_pct = 0.1
-stop_time = -1
 epoch = 0
 error_batch = False
 merge_every = 0
@@ -68,14 +64,9 @@ valid_lab = velocities(np.arange(3000, 4000))
 test_dat = neural(np.arange(4000, 5000))
 test_lab = velocities(np.arange(4000, 5000))
 
-print(full_dat.shape)
-print(full_lab.shape)
-print(valid_dat.shape)
-
 input_size = 1
 for i in input_shape:
     input_size *= i
-
 
 # set up network
 
@@ -111,9 +102,6 @@ def create_full_layer(in_size, out_size, layer_list, weight_list,
     temp_b = len(bias_list)
     temp_l = len(layer_list)
     layer_list.append(tf.nn.sigmoid(tf.matmul(layer_list[temp_l - 1], weight_list[temp_w - 1]) + bias_list[temp_b - 1]))
-
-
-time_global_start = time.time()
 
 
 def populate_graph(
@@ -161,7 +149,7 @@ def populate_graph(
             inter_op_parallelism_threads=inter_threads,
             intra_op_parallelism_threads=intra_threads))
 
-    accuracy_mse = tf.reduce_sum(tf.squared_difference(y_, y))
+    mse_val = tf.reduce_sum(tf.squared_difference(y_, y))
 
     sess.run(init)
 
@@ -176,8 +164,8 @@ def populate_graph(
         "w_assign": w_assign,
         "b_assign": b_assign,
         "train_step": train_step,
-        "cross_entropy": mse_loss,
-        "accuracy": accuracy_mse,
+        "mse_loss": mse_loss,
+        "mse_val": mse_val,
     }
 
     return ops
@@ -189,14 +177,7 @@ def run_graph(
         train_batch,
         ops,
         saved_state):
-    global time_global_start
     global epoch
-    global max_accuracy_encountered_value
-    global max_accuracy_encountered_epoch
-    global max_accuracy_encountered_time
-
-    time_epoch_start = time.time()
-    time_comm = 0.0
 
     sess = ops["sess"]
     x = ops["x"]
@@ -208,8 +189,8 @@ def run_graph(
     w_assign = ops["w_assign"]
     b_assign = ops["b_assign"]
     train_step = ops["train_step"]
-    cross_entropy = ops["cross_entropy"]
-    accuracy = ops["accuracy"]
+    mse_loss = ops["mse_loss"]
+    mse_val = ops["mse_val"]
 
     # use saved state to assign saved weights and biases
     if saved_state is not None:
@@ -221,9 +202,8 @@ def run_graph(
         sess.run(w_assign + b_assign, feed_dict=feed_dict)
 
     number_of_batches = int(len(data) / train_batch)
-    time_this = time.time()
     min_batches = comm.allreduce(number_of_batches, MPI.MIN)
-    time_comm += time.time() - time_this
+
     if number_of_batches == 0:
         number_of_batches = 1
 
@@ -234,7 +214,6 @@ def run_graph(
         batch_ys = labels[lo:hi]
         sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
         if (i < min_batches) and (merge_every >= 1) and (i % merge_every == 0):
-            time_this = time.time()
             r_weights = sess.run(weights)
             r_biases = sess.run(biases)
             for r in r_weights:
@@ -249,11 +228,10 @@ def run_graph(
             for d, p in zip(r_biases, b_holder):
                 feed_dict[p] = d
             sess.run(w_assign + b_assign, feed_dict=feed_dict)
-            time_comm += time.time() - time_this
 
     # average as soon as we're done with all batches so the error and
-    # accuracy reflect the current epoch
-    time_this = time.time()
+    # mse_val reflect the current epoch
+
     r_weights = sess.run(weights)
     r_biases = sess.run(biases)
     for r in r_weights:
@@ -262,14 +240,12 @@ def run_graph(
     for r in r_biases:
         comm.Allreduce(MPI.IN_PLACE, r, MPI.SUM)
         r /= size
-    time_comm += time.time() - time_this
     feed_dict = {}
     for d, p in zip(r_weights, w_holder):
         feed_dict[p] = d
     for d, p in zip(r_biases, b_holder):
         feed_dict[p] = d
     sess.run(w_assign + b_assign, feed_dict=feed_dict)
-    time_comm += time.time() - time_this
 
     sum_error = 0.0
     if error_batch:
@@ -278,12 +254,10 @@ def run_graph(
             hi = (i + 1) * train_batch
             batch_xs = data[lo:hi]
             batch_ys = labels[lo:hi]
-            sum_error += sess.run(cross_entropy, feed_dict={x: batch_xs, y_: batch_ys})
+            sum_error += sess.run(mse_loss, feed_dict={x: batch_xs, y_: batch_ys})
     else:
-        sum_error = sess.run(cross_entropy, feed_dict={x: data, y_: labels})
-    time_this = time.time()
+        sum_error = sess.run(mse_loss, feed_dict={x: data, y_: labels})
     sum_error_all = comm.allreduce(sum_error)
-    time_comm += time.time() - time_this
     batch_mse = 0.0
     if error_batch:
         test_batch_count = len(test_dat) / train_batch
@@ -294,34 +268,22 @@ def run_graph(
             hi = (i + 1) * train_batch
             batch_xs = test_dat[lo:hi]
             batch_ys = test_lab[lo:hi]
-            batch_mse += sess.run(accuracy, feed_dict={x: batch_xs, y_: batch_ys})
+            batch_mse += sess.run(mse_val, feed_dict={x: batch_xs, y_: batch_ys})
     else:
-        batch_mse = sess.run(accuracy, feed_dict={x: test_dat, y_: test_lab})
-    time_this = time.time()
+        batch_mse = sess.run(mse_val, feed_dict={x: test_dat, y_: test_lab})
     batch_mse = comm.allreduce(batch_mse, MPI.SUM)
-    acc_count = comm.allreduce(len(test_dat), MPI.SUM)
-    batch_mse = float(batch_mse) / acc_count
-    time_comm += time.time() - time_this
-
-    time_all = time.time() - time_epoch_start
+    count = comm.allreduce(len(test_dat), MPI.SUM)
+    batch_mse = float(batch_mse) / count
 
     if 0 == rank:
-        print("%s,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f")(
-            epoch + 1,
-            time_all,
-            time.time() - time_global_start,
-            batch_mse,
-            resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000.0,
-            time_comm / time_all,
-            sum_error_all,
-        )
+        print(epoch + 1, batch_mse, sum_error_all)
     sys.stdout.flush()
 
     return r_weights, r_biases
 
 
 if 0 == rank:
-    print("epoch,etime,ctime,accuracy,MB_mem,time_comm,error")
+    print("epoch,mse_val,error")
 
 data_threshold = int(len(full_dat) / 2)
 active_dat = full_dat
@@ -329,33 +291,17 @@ active_lab = full_lab
 inactive_dat = np.empty([0] + list(full_dat.shape[1:]), full_dat.dtype)
 inactive_lab = np.empty([0] + list(full_lab.shape[1:]), full_lab.dtype)
 
-if stop_time > 0:
-    saved_state = None
-    ops = populate_graph(
-        full_layers,
-        learning_rate,
-        input_shape,
+saved_state = None
+ops = populate_graph(
+    full_layers,
+    learning_rate,
+    input_shape,
+    saved_state)
+for epoch in range(epochs):
+    saved_state = run_graph(
+        active_dat,
+        active_lab,
+        train_batch,
+        ops,
         saved_state)
-    while stop_time > (time.time() - time_global_start):
-        saved_state = run_graph(
-            active_dat,
-            active_lab,
-            train_batch,
-            ops,
-            saved_state)
-        epoch += 1
 
-else:
-    saved_state = None
-    ops = populate_graph(
-        full_layers,
-        learning_rate,
-        input_shape,
-        saved_state)
-    for epoch in range(epochs):
-        saved_state = run_graph(
-            active_dat,
-            active_lab,
-            train_batch,
-            ops,
-            saved_state)
