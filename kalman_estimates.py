@@ -40,6 +40,6 @@ S_est = np.cov(y[1:, ].T-np.matmul(A_est, y[:-1, ].T))
 C_est = np.linalg.lstsq(y, X)[0].T
 Q_est = np.cov(X.T-np.matmul(C_est, y.T))
 
-np.savez('kalman_estimates', A_est, S_est, C_est, Q_est)
+np.savez('kalman_estimates', A_est=A_est, S_est=S_est, C_est=C_est, Q_est=Q_est)
 
 
