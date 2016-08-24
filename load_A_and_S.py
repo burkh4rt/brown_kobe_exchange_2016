@@ -1,3 +1,5 @@
+import numpy as np
+
 # load Kalman parameters
 param_file = np.load('kalman_estimates.npz')
 
