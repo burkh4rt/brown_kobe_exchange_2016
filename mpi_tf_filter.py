@@ -6,8 +6,23 @@ mpiexec -n 4 python3 mpi_tf_filter.py
 from mpi4py import MPI
 import tensorflow as tf
 import numpy as np
+import scipy as sp
 import os
 
+###### load A and S py
+# load Kalman parameters
+param_file = np.load('kalman_estimates.npz')
+
+# for location update
+A_est = param_file['A_est']
+S_est = param_file['S_est']
+
+# for weight update
+C_est = param_file['C_est']
+Q_est = param_file['Q_est']
+##########
+
+#TODO: Update for your local environment
 file_location = 'C:/Users/Ankan/Documents/Kobe_2016/Project'
 
 comm = MPI.COMM_WORLD
@@ -70,21 +85,38 @@ for t in range(n_test):
 
         #Resample #TODO: parallelize
         particle_resampling = np.random.multinomial(1, weights.flatten(), size)
-        particles = tf.matmul(particle_resampling, particles)
+        particles = np.matmul(particle_resampling, particles)
         weights = np.ones((size,1))/size
         particles_weights = np.hstack((particles,weights))
 
     #Send resampling and observations to other threads
     comm.Bcast(observation, root=0)        
     comm.Scatter(particle_weights, particle_weight)
+
+    #Update resampled particles and uniform weights
     particle = particle_weight[:d_velocities, ]
     weight = particle_weight[d_velocities:, ]
 
-    
+    #Update particles with time
+    particle.T = np.matmul(A_est, particle.T) + np.random.normal(np.zeros(2), S_est);
 
-# update particle position
-# comm.Reduce(weighted_particle, prediction)
-comm.Gather(particle, particles)
+    #Update weights
+    weight = sp.stats.multivariate_normal.pdf(observation.T,
+                                              mean = np.matmul(C_est, particle.T),
+                                              cov = Q_est)
+    particle_weight = np.hstack((particle,weight))
+
+    #Pass all weights and particles to root
+    comm.Gather(particle_weight, particles_weights)
+    particles = particles_weights[:d_velocities, ]
+    weights = particles_weights[d_velocities:, ]
+
+    #Renormalize weights
+    weights = weights/np.sum(weights)
+
+    #TODO: fix individual weights
+
+
 
 
 
