@@ -71,7 +71,7 @@ for t in range(n_test):
         #Resample #TODO: parallelize
         particle_resampling = np.random.multinomial(1, weights.flatten(), size)
         particles = tf.matmul(particle_resampling, particles)
-        weights - np.ones((size,1))/size
+        weights = np.ones((size,1))/size
         particles_weights = np.hstack((particles,weights))
 
     #Send resampling and observations to other threads
