@@ -105,13 +105,13 @@ for t in range(n_test):
     log_weight = np.log(weight)
 
     #Update particles with time
-    particle.T = np.matmul(A_est, particle.T) + np.random.normal(np.zeros(2), S_est);
+    particle = np.matmul(A_est, particle) + np.random.normal(np.zeros(2), S_est);
 
     #Update weights
     #log_weight = sp.stats.multivariate_normal.pdf(observation.T,
     #                                          mean = np.matmul(C_est, particle.T),
     #                                          cov = Q_est))
-    mean_pred_weight = np.matmul(C_est, particle.T)
+    mean_pred_weight = np.matmul(C_est, particle)
     cov_pred_weight = Q_est
     log_weight = -np.matmul(np.matmul(np.subtract(observation.T,mean_pred_weight.T),
                                       Q_estinv),
