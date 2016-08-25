@@ -14,14 +14,14 @@ rank = comm.Get_rank()
 size = comm.Get_size()
 
 # describe our data
-n_test = 500
+n_test = 10
 n_steps = 30
 
 d_neural = 600
 d_velocities = 2
 
 # move to where data is
-os.chdir('/Users/michael/Documents/brown/kobe/data')
+os.chdir( '/home/ankan/Documents/Kobe2016/Project/brown_kobe_exchange_2016')
 
 # load Kalman parameters
 param_file = np.load('kalman_estimates.npz')
