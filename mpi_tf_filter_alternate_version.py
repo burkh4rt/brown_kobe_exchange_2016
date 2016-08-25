@@ -7,7 +7,6 @@ from mpi4py import MPI
 import tensorflow as tf
 import numpy as np
 import os
-from scipy.stats import multivariate_normal as mvn
 
 # instantiate MPI communicator
 comm = MPI.COMM_WORLD
@@ -15,7 +14,7 @@ rank = comm.Get_rank()
 size = comm.Get_size()
 
 # describe our data
-n_test = 5000
+n_test = 500
 n_steps = 30
 
 d_neural = 600
@@ -78,23 +77,25 @@ for t in range(n_test):
         # grab new observation
         observation = neural(np.arange(1) + t)
 
-    # send out the particles to different processes
+    # send out the particles and observation to different processes
     comm.Scatter(particles_weights, particle_weight, root=0)
     comm.Bcast(observation, root=0)
+    
+    # unpack particles and weights
     particle = particle_weight[:d_velocities, ]
     weight = particle_weight[d_velocities:, ]
 
-    # update particle location
+    # update particle location on individual processes
     particle = np.random.multivariate_normal(np.matmul(A_est, particle), S_est)
 
-    # update particle weight
+    # update particle weight on individual processes
     diff = np.matmul(C_est, particle) - observation.flatten()
     log_weight = -0.5 * np.matmul(np.matmul(diff.T, np.linalg.pinv(Q_est)), diff)
     particle_weight = np.hstack((particle, log_weight))
 
     comm.Barrier()
 
-    # return
+    # return particle weights to root
     comm.Gather(particle_weight, particles_weights)
 
     if rank == 0:
@@ -104,4 +105,3 @@ for t in range(n_test):
         weights = weights / np.sum(weights)
         estimate = np.matmul(weights.T, particles)
         print('est=', estimate, 'true=', velocities(np.arange(1) + t))
-
