@@ -52,3 +52,5 @@ print(all_est.shape)
 print('true metadata')
 print(all_true.shape)
 
+main()
+
