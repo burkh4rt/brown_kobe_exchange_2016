@@ -67,6 +67,7 @@ log_weight = np.zeros(1)
 particle_log_weight = np.hstack((particle, log_weight))
 particles_weights = None
 particle_weight = None
+particles_log_weights = None
 
 if rank == 0:
     particles = np.random.multivariate_normal(np.zeros(2), np.eye(2), size)
