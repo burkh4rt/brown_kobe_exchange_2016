@@ -4,7 +4,7 @@ mpiexec -n 4 python3 mpi_tf_filter.py
 """
 
 from mpi4py import MPI
-import tensorflow as tf
+#import tensorflow as tf
 import numpy as np
 import scipy as sp
 import os
@@ -65,6 +65,7 @@ log_weights = None
 particle = np.zeros(d_velocities)   #each particle is a velocity.
 log_weight = np.zeros(1)                 
 particle_log_weight = np.hstack((particle, log_weight))
+particles_weights = None
 
 if rank == 0:
     particles = np.random.multivariate_normal(np.zeros(2), np.eye(2), size)
