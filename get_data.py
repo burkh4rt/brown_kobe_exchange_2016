@@ -27,13 +27,13 @@ def scatplot(time):
     c_model[:] = 'red'
     s_model = all_weights[time,:]*100
 
-    x_est = all_est[time,1]
-    y_est = all_est[time,2]
+    x_est = all_est[time,0]
+    y_est = all_est[time,1]
     c_est = 'blue'
     s_model = 20
 
-    x_data = all_true[time,1]
-    y_data = all_true[time,2]
+    x_data = all_true[time,0]
+    y_data = all_true[time,1]
     c_data = 'black'
     s_data = 20
    
