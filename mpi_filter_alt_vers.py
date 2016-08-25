@@ -1,6 +1,6 @@
 """
 run with:
-mpiexec -n 4 python3 mpi_tf_filter.py
+mpiexec -n 4 python3 mpi_filter_alt_vers.py
 """
 
 from mpi4py import MPI
