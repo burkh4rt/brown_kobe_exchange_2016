@@ -97,7 +97,7 @@ for t in range(n_test):
 
     #Send resampling and observations to other threads
     comm.Bcast(observation, root=0)        
-    comm.Scatter(particle_weights, particle_weight)
+    comm.Scatter(particles_weights, particle_weight)
 
     #Update resampled particles and uniform weights
     particle = particle_weight[:d_velocities, ]
