@@ -100,12 +100,12 @@ for t in range(n_test):
     comm.Scatter(particles_weights, particle_weight)
 
     #Update resampled particles and uniform weights
-    particle = particle_weight[:d_velocities, ]
+    particle = particle_weight[:d_velocities, ] #vector of dim 2
     weight = particle_weight[d_velocities:, ]
     log_weight = np.log(weight)
 
     #Update particles with time
-    particle = np.matmul(A_est, particle) + np.random.normal(np.zeros(2), S_est);
+    particle = np.matmul(A_est, particle) + np.random.multivariate_normal(np.zeros(2), S_est);
 
     #Update weights
     #log_weight = sp.stats.multivariate_normal.pdf(observation.T,
@@ -113,9 +113,13 @@ for t in range(n_test):
     #                                          cov = Q_est))
     mean_pred_weight = np.matmul(C_est, particle)
     cov_pred_weight = Q_est
-    log_weight = -np.matmul(np.matmul(np.subtract(observation.T,mean_pred_weight.T),
-                                      Q_estinv),
-                            np.subtract(observation,mean_pred_weight))/2
+    diff = np.subtract(observation.flatten(),mean_pred_weight)
+    log_weight = np.matmul(diff.T, Q_estinv)
+    log_weight = np.matmul(log_weight, diff)
+    log_weight = -log_weight/2
+    #log_weight = -np.matmul(np.matmul(np.subtract(observation.T,mean_pred_weight.T),
+    #                                  Q_estinv),
+    #                        np.subtract(observation,mean_pred_weight))/2
     particle_log_weight = np.hstack((particle,log_weight))
 
     #Make sure all particle_weight arrays are set before sharing with root
