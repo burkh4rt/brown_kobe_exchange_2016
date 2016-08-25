@@ -4,7 +4,7 @@ mpiexec -n 4 python3 mpi_filter_alt_vers.py
 """
 
 from mpi4py import MPI
-import tensorflow as tf
+# import tensorflow as tf
 import numpy as np
 import os
 
@@ -29,6 +29,8 @@ A_est = param_file['A_est']
 S_est = param_file['S_est']
 C_est = param_file['C_est']
 Q_est = param_file['Q_est']
+
+Q_est_inv = np.linalg.pinv(Q_est)
 
 # grab data on root process
 if rank == 0:
@@ -66,6 +68,13 @@ if rank == 0:
     weights = np.ones((size, 1))/size
     particles_weights = np.hstack((particles, weights))
 
+# store data
+if rank == 0:
+    all_particles = np.empty([n_test, size, d_velocities])
+    all_weights = np.empty([n_test, size, 1])
+    all_true = np.empty([n_test, d_velocities])
+    all_est = np.empty([n_test, d_velocities])
+
 for t in range(n_test):
     if rank == 0:
         # resampling step
@@ -77,31 +86,33 @@ for t in range(n_test):
         # grab new observation
         observation = neural(np.arange(1) + t)
 
-    # send out the particles and observation to different processes
+    # send out the particles to different processes
     comm.Scatter(particles_weights, particle_weight, root=0)
     comm.Bcast(observation, root=0)
-    
-    # unpack particles and weights
     particle = particle_weight[:d_velocities, ]
     weight = particle_weight[d_velocities:, ]
 
-    # update particle location on individual processes
+    # update particle location
     particle = np.random.multivariate_normal(np.matmul(A_est, particle), S_est)
 
-    # update particle weight on individual processes
+    # update particle weight
     diff = np.matmul(C_est, particle) - observation.flatten()
-    log_weight = -0.5 * np.matmul(np.matmul(diff.T, np.linalg.pinv(Q_est)), diff)
+    log_weight = -0.5 * np.matmul(np.matmul(diff.T, Q_est_inv), diff)
     particle_weight = np.hstack((particle, log_weight))
 
     comm.Barrier()
 
-    # return particle weights to root
+    # return
     comm.Gather(particle_weight, particles_weights)
 
     if rank == 0:
-        particles = particles_weights[:, :d_velocities]
+        all_particles[t, :, :] = particles = particles_weights[:, :d_velocities]
         log_weights = particles_weights[:, d_velocities:]
         weights = np.exp(log_weights - np.max(log_weights))
-        weights = weights / np.sum(weights)
-        estimate = np.matmul(weights.T, particles)
-        print('est=', estimate, 'true=', velocities(np.arange(1) + t))
+        all_weights[t, :, :] = weights = weights / np.sum(weights)
+        all_est[t, :] = estimate = np.matmul(weights.T, particles)
+        all_true[t, :] = true = velocities(np.arange(1) + t)
+        print('est=', estimate, 'true=', true)
+
+if rank == 0:
+    np.savez('filter_run', all_particles=all_particles, all_weights=all_weights, all_est=all_est, all_true=all_true)
