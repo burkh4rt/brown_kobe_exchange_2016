@@ -24,7 +24,8 @@ Q_estinv = np.linalg.inv(Q_est)
 ##########
 
 #TODO: Update for your local environment
-file_location = 'C:/Users/Ankan/Documents/Kobe_2016/Project'
+#file_location = 'C:/Users/Ankan/Documents/Kobe_2016/Project'
+file_location = '/users/guest055/scratch/Project/bke2016'
 
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
@@ -63,10 +64,11 @@ if rank == 0:
 particles = None
 log_weights = None
 particle = np.zeros(d_velocities)   #each particle is a velocity.
-log_weight = np.zeros(1)                 
+log_weight = np.zeros(1)
+weight = np.ones(1)
 particle_log_weight = np.hstack((particle, log_weight))
+particle_weight = np.hstack((particle,weight))
 particles_weights = None
-particle_weight = None
 particles_log_weights = None
 
 if rank == 0:
