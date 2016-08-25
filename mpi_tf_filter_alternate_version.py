@@ -89,7 +89,7 @@ for t in range(n_test):
 
     # update particle weight
     diff = np.matmul(C_est, particle) - observation.flatten()
-    log_weight = -0.5 * np.matmul(diff.T, diff)
+    log_weight = -0.5 * np.matmul(np.matmul(diff.T, np.linalg.pinv(Q_est)), diff)
     particle_weight = np.hstack((particle, log_weight))
 
     comm.Barrier()
