@@ -20,6 +20,7 @@ S_est = param_file['S_est']
 # for weight update
 C_est = param_file['C_est']
 Q_est = param_file['Q_est']
+Q_estinv = np.linalg.inv(Q_est)
 ##########
 
 #TODO: Update for your local environment
@@ -60,20 +61,20 @@ if rank == 0:
 
 # initialize particles
 particles = None
-weights = None
+log_weights = None
 particle = np.zeros(d_velocities)   #each particle is a velocity.
-weight = np.ones(1)                 
-particle_weight = np.hstack((particle, weight))
+log_weight = np.zeros(1)                 
+particle_log_weight = np.hstack((particle, log_weight))
 
 if rank == 0:
     particles = np.random.multivariate_normal(np.zeros(2), np.eye(2), size)
     weights = np.ones((size, 1))/size
     particles_weights = np.hstack((particles, weights))     #dim 3 horizontal np_array
 
-
 comm.Scatter(particles_weights, particle_weight)
 particle = particle_weight[:d_velocities, ]
 weight = particle_weight[d_velocities:, ]
+log_weight = np.log(weight)
 
 observation = np.zeros(d_neural)
 
@@ -96,32 +97,45 @@ for t in range(n_test):
     #Update resampled particles and uniform weights
     particle = particle_weight[:d_velocities, ]
     weight = particle_weight[d_velocities:, ]
+    log_weight = np.log(weight)
 
     #Update particles with time
     particle.T = np.matmul(A_est, particle.T) + np.random.normal(np.zeros(2), S_est);
 
     #Update weights
-    weight = sp.stats.multivariate_normal.pdf(observation.T,
-                                              mean = np.matmul(C_est, particle.T),
-                                              cov = Q_est)
-    particle_weight = np.hstack((particle,weight))
+    #log_weight = sp.stats.multivariate_normal.pdf(observation.T,
+    #                                          mean = np.matmul(C_est, particle.T),
+    #                                          cov = Q_est))
+    mean_pred_weight = np.matmul(C_est, particle.T)
+    cov_pred_weight = Q_est
+    log_weight = -np.matmul(np.matmul(np.subtract(observation.T,mean_pred_weight.T),
+                                      Q_estinv),
+                            np.subtract(observation,mean_pred_weight))/2
+    particle_log_weight = np.hstack((particle,log_weight))
+
+    #Make sure all particle_weight arrays are set before sharing with root
+    comm.Barrier();
+
 
     #Pass all weights and particles to root
-    comm.Gather(particle_weight, particles_weights)
-    particles = particles_weights[:d_velocities, ]
-    weights = particles_weights[d_velocities:, ]
+    comm.Gather(particle_log_weight, particles_log_weights)
 
-    #Renormalize weights
-    weights = weights/np.sum(weights)
+    if rank==0:
+        particles = particles_weights[:d_velocities, ]
+        log_weights = particles_log_weights[d_velocities:, ]
+        log_weights = log_weights - max(log_weights)
+        weights = np.exp(log_weights)
 
-    #TODO: fix individual weights
+        #Renormalize weights
+        weights = weights/np.sum(weights)
 
+        particles_weights = np.hstack((particles,weights))
+        particles_log_weights = np.hstack((particles,log_weights))
 
+        #When we reiterate, we immediately reset weights and weight
 
-
-
-
-
-
-
-
+    comm.Scatter(particles_weights, particle_weight)
+    comm.Scatter(particles_log_weights, particle_log_weight)
+    particle = particle_weight[:d_velocities,]
+    weight = particle_weight[d_velocities:,]
+    log_weight = particle_log_weight[d_velocities:,]
