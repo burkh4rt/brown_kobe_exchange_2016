@@ -113,11 +113,13 @@ for t in range(n_test):
     comm.Gather(particle_weight, wide_particles_weights)
 
     if rank == 0:
-        particles = wide_particles_weights[:, :d_velocities*npt]
+        particles = wide_particles_weights[:, :(d_velocities*npt)]
+        print('wide_particles_weights size = ' + str(wide_particles_weights.shape))
         particles = particles.reshape((size*npt, d_velocities))
-        log_weights = particles_weights[:, npt*d_velocities:]
+        log_weights = particles_weights[:, (npt*d_velocities):]
         print('log weights shape = ' + str(log_weights.shape))
-        log_weights = log_weights.reshape((size*npt, 1))
+        log_weights = log_weights.flatten()
+        print('log weights shape = ' + str(log_weights.shape))
         weights = np.exp(log_weights - np.max(log_weights))
         weights = weights / np.sum(weights)
         estimate = np.matmul(weights.T, particles)
