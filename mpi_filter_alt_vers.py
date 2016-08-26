@@ -30,6 +30,7 @@ A_est = param_file['A_est']
 S_est = param_file['S_est']
 C_est = param_file['C_est']
 Q_est = param_file['Q_est']
+Q_estinv = np.linalg.inv(Q_est)
 
 # grab data on root process
 if rank == 0:
@@ -108,7 +109,7 @@ for t in range(n_test):
     for i in range(npt):
         particle_subset[i,:] = np.random.multivariate_normal(np.matmul(particle_subset[i,:],A_est.T), S_est)
         diff = np.matmul(C_est, particle_subset[i,:].T).flatten() - observation.flatten()
-        log_weight[i] = -0.5 * np.matmul(np.matmul(diff.T, np.linalg.pinv(Q_est)), diff)
+        log_weight[i] = -0.5 * np.matmul(np.matmul(diff.T, Q_estinv), diff)
 
     particle_weight = np.hstack((particle, log_weight))
 
