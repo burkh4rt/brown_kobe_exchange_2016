@@ -125,5 +125,5 @@ for t in range(n_test):
 if rank == 0:
     np.savez('filter_run', all_particles=all_particles, all_weights=all_weights, all_est=all_est, all_true=all_true)
     toc = time.clock() - tic
-    print('run_time=', toc, 's')
+    print('run_time=', toc, 'sec')
 
