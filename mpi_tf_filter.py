@@ -88,17 +88,15 @@ for t in range(n_test):
         # Update observations
         ind = t*np.ones(1)
         observation = neural(ind)
-
         #Resample #TODO: parallelize
         particle_resampling = np.random.multinomial(1, weights.flatten(), size)
         particles = np.matmul(particle_resampling, particles)
         weights = np.ones((size,1))/size
         particles_weights = np.hstack((particles,weights))
-
+        
     #Send resampling and observations to other threads
     comm.Bcast(observation, root=0)        
     comm.Scatter(particles_weights, particle_weight)
-
     #Update resampled particles and uniform weights
     particle = particle_weight[:d_velocities, ]
     weight = particle_weight[d_velocities:, ]
@@ -106,11 +104,7 @@ for t in range(n_test):
 
     #Update particles with time
     particle = np.matmul(A_est, particle) + np.random.normal(np.zeros(2), S_est);
-
     #Update weights
-    #log_weight = sp.stats.multivariate_normal.pdf(observation.T,
-    #                                          mean = np.matmul(C_est, particle.T),
-    #                                          cov = Q_est))
     mean_pred_weight = np.matmul(C_est, particle)
     cov_pred_weight = Q_est
     log_weight = -np.matmul(np.matmul(np.subtract(observation.T,mean_pred_weight.T),
@@ -120,8 +114,6 @@ for t in range(n_test):
 
     #Make sure all particle_weight arrays are set before sharing with root
     comm.Barrier();
-
-
     #Pass all weights and particles to root
     comm.Gather(particle_log_weight, particles_log_weights)
 
