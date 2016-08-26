@@ -69,6 +69,13 @@ if rank == 0:
     weights = np.ones((size*npt, 1))/(size*npt)
     particles_weights = np.hstack((particles, weights))
 
+# store data
+if rank == 0:		
+    all_particles = np.empty([n_test, npt*size, d_velocities])		
+    all_weights = np.empty([n_test, npt*size, 1])		
+    all_true = np.empty([n_test, d_velocities])		
+    all_est = np.empty([n_test, d_velocities])
+
 for t in range(n_test):
     if rank == 0:
         # resampling step
@@ -103,9 +110,7 @@ for t in range(n_test):
         diff = np.matmul(C_est, particle_subset[i,:].T).flatten() - observation.flatten()
         log_weight[i] = -0.5 * np.matmul(np.matmul(diff.T, np.linalg.pinv(Q_est)), diff)
 
-    print('log weight shape = ' + str(log_weight.shape))
     particle_weight = np.hstack((particle, log_weight))
-    print('particle_weight shape = ' + str(particle_weight.shape))
 
     comm.Barrier()
 
@@ -114,13 +119,18 @@ for t in range(n_test):
 
     if rank == 0:
         particles = wide_particles_weights[:, :(d_velocities*npt)]
-        print('wide_particles_weights size = ' + str(wide_particles_weights.shape))
         particles = particles.reshape((size*npt, d_velocities))
-        log_weights = particles_weights[:, (npt*d_velocities):]
-        print('log weights shape = ' + str(log_weights.shape))
-        log_weights = log_weights.flatten()
-        print('log weights shape = ' + str(log_weights.shape))
+        log_weights = wide_particles_weights[:, (npt*d_velocities):]
+        log_weights = log_weights.reshape((npt*size),1)
         weights = np.exp(log_weights - np.max(log_weights))
         weights = weights / np.sum(weights)
         estimate = np.matmul(weights.T, particles)
-        print('est=', estimate, 'true=', velocities(np.arange(1) + t))
+
+        all_particles[t, :, :] = particles
+        all_weights[t, :, :] = weights
+        all_est[t, :] = estimate
+        all_true[t, :] = true = velocities(np.arange(1) + t)
+        print('est=', estimate, 'true=', true)		
+	
+if rank == 0:		
+    np.savez('filter_run', all_particles=all_particles, all_weights=all_weights, all_est=all_est, all_true=all_true)
