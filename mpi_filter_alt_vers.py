@@ -4,7 +4,7 @@ mpiexec -n 4 python3 mpi_filter_alt_vers.py
 """
 
 from mpi4py import MPI
-import tensorflow as tf
+#import tensorflow as tf
 import numpy as np
 import os
 
@@ -56,6 +56,7 @@ if rank == 0:
 particles = None
 weights = None
 particles_weights = None
+wide_particles_weights = None
 particle = np.zeros(d_velocities*npt)
 weight = np.ones(npt)
 log_weight = np.zeros(npt)
@@ -79,10 +80,10 @@ for t in range(n_test):
         # grab new observation
         observation = neural(np.arange(1) + t)
 
-    #TODO: TEST
-    wide_particles = particles.reshape((size,d_velocities*npt))
-    wide_weights = weights.reshape((size,npt))
-    wide_particles_weights = np.hstack((wide_particles,wide_weights))
+        #TODO: TEST
+        wide_particles = particles.reshape((size,d_velocities*npt))
+        wide_weights = weights.reshape((size,npt))
+        wide_particles_weights = np.hstack((wide_particles,wide_weights))
 
     # send out the particles and observation to different processes
     comm.Scatter(wide_particles_weights, particle_weight, root=0)
@@ -96,15 +97,15 @@ for t in range(n_test):
     #particles subset is set of particles handled by thread
     particle_subset = particle.reshape((npt,d_velocities))
 
-    # update particle location on individual processes
-    particle_subset = np.random.multivariate_normal(np.matmul(particle_subset, A_est.T), S_est)
-
     # update particle weight on individual processes
     for i in range(npt):
+        particle_subset[i,:] = np.random.multivariate_normal(np.matmul(particle_subset[i,:],A_est.T), S_est)
         diff = np.matmul(C_est, particle_subset[i,:].T).flatten() - observation.flatten()
         log_weight[i] = -0.5 * np.matmul(np.matmul(diff.T, np.linalg.pinv(Q_est)), diff)
-        
+
+    print('log weight shape = ' + str(log_weight.shape))
     particle_weight = np.hstack((particle, log_weight))
+    print('particle_weight shape = ' + str(particle_weight.shape))
 
     comm.Barrier()
 
@@ -112,9 +113,10 @@ for t in range(n_test):
     comm.Gather(particle_weight, wide_particles_weights)
 
     if rank == 0:
-        particles = wide_particles_weights[:, :d_velocities]
+        particles = wide_particles_weights[:, :d_velocities*npt]
         particles = particles.reshape((size*npt, d_velocities))
         log_weights = particles_weights[:, npt*d_velocities:]
+        print('log weights shape = ' + str(log_weights.shape))
         log_weights = log_weights.reshape((size*npt, 1))
         weights = np.exp(log_weights - np.max(log_weights))
         weights = weights / np.sum(weights)
