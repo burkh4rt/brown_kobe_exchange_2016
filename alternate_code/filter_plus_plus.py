@@ -35,7 +35,7 @@ S_est = param_file['S_est']
 C_est = param_file['C_est']
 Q_est = param_file['Q_est']
 
-Q_est_inv = np.linalg.pinv(Q_est)
+Q_est_inv = np.linalg.inv(Q_est)
 
 # grab data on root process
 if rank == 0:
