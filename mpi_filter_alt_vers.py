@@ -14,12 +14,12 @@ rank = comm.Get_rank()
 size = comm.Get_size()
 
 # describe our data
-n_test = 10
+n_test = 500
 n_steps = 30
 
 d_neural = 600
 d_velocities = 2
-npt = 5
+npt = 100
 
 # move to where data is
 os.chdir('.')

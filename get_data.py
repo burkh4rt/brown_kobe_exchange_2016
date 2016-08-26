@@ -13,16 +13,17 @@ numpoints = all_particles.shape[1]
 tot_time = all_particles.shape[0]
 
 fig = plt.figure()
-ax = plt.axes(xlim = (-0.5,0.5), ylim = (-0.5,0.5))
+ax = plt.axes(xlim = (-0.15,0.15), ylim = (-0.15,0.15))
 
 def main():
     ani = mpa.FuncAnimation(fig, scatplot, frames = xrange(tot_time))
 
+    #Use FFmpeg to write animation to file
+    #ffmpeg_writer = mpa.FFMpegWriter(fps = 10)
+    #ani.save('particle_estimates.mp4', writer = ffmpeg_writer)
+
     plt.show()
     
-#def scatinit():
-#    scat = plt.scatter([],[], edgecolor = 'None')
-#    return scat 
     
 
 def scatplot(time):
@@ -43,16 +44,21 @@ def scatplot(time):
     c_data = 'black'
     s_data = 20
 
-    x = np.append(x_model,x_data)
-    y = np.append(y_model,y_data)
-    c = np.append(c_model,c_data)
-    s = np.append(s_model,s_data)
+    x1 = np.append(x_model,x_data)
+    y1 = np.append(y_model,y_data)
+    c1 = np.append(c_model,c_data)
+    s1 = np.append(s_model,s_data)
+
+    x = np.append(x1, x_est)
+    y = np.append(y1, y_est)
+    c = np.append(c1, c_est)
+    s = np.append(s1, s_est)
    
 #    scat.set_sizes(s)
 #    scat.set_offsets(np.hstack((x,y)))
 #    scat.set_color(c) 
 
-    ax = plt.axes(xlim = (-0.1,0.1), ylim = (-0.1,0.1))
+    ax = plt.axes(xlim = (-0.15,0.15), ylim = (-0.15,0.15))
     scat = plt.scatter(x,y,c=c,s=s,edgecolor='None')
    
     return scat
@@ -67,4 +73,5 @@ print('true metadata')
 print(all_true.shape)
 
 main()
+
 
