@@ -1,6 +1,6 @@
 """
 run with:
-mpiexec -n 4 python3 filter_pp.py
+mpiexec -n 4 python3 filter_plus_plus.py
 """
 
 from mpi4py import MPI
