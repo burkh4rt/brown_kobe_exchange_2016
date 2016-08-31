@@ -3,7 +3,7 @@ import numpy as np
 from math import sqrt
 
 # grab data
-npzfile = np.load('Flint_2012_e1_PCA.npz')
+npzfile = np.load('../Flint_2012_e1_PCA.npz')
 all_time = npzfile['all_time']
 all_velocities = npzfile['all_velocities']
 all_neural = npzfile['all_neural']
@@ -125,7 +125,7 @@ with g1.as_default():
     # Instantiate a SummaryWriter to output summaries and the Graph.
     summary_writer = tf.train.SummaryWriter('../writers/1',  sess1.graph)
 	
-	tf.train.write_graph(g1.as_graph_def(), '../writers/1', 'g1.pbtxt') 
+	#tf.train.write_graph(g1.as_graph_def(), '../writers/1', 'g1.pbtxt') 
 
     # Run the Op to initialize the variables.
     sess1.run(init)
@@ -235,7 +235,7 @@ with g2.as_default():
     # Instantiate a SummaryWriter to output summaries and the Graph.
     summary_writer = tf.train.SummaryWriter('../writers/2', sess2.graph)
 
-	tf.train.write_graph(g2.as_graph_def(), '../writers/2', 'g2.pbtxt') 
+	#tf.train.write_graph(g2.as_graph_def(), '../writers/2', 'g2.pbtxt') 
 	
     # Run the Op to initialize the variables.
     sess2.run(init)
