@@ -84,7 +84,7 @@ with g1.as_default():
         weights = tf.Variable(tf.truncated_normal([d_feat, d_velocities], stddev=1 / sqrt(float(d_velocities))),
                               name='weights')
         biases = tf.Variable(tf.zeros([d_velocities]), name='biases')
-        outputs = tf.nn.relu6(tf.matmul(features, weights) + biases)
+        outputs = tf.matmul(features, weights) + biases
         tf.histogram_summary('weights4', weights)
         tf.histogram_summary('biases4', biases)
         tf.histogram_summary('errors1', outputs - velocities_)
@@ -167,7 +167,7 @@ with g2.as_default():
         with tf.name_scope('features'):
             weights = tf.constant(sess1.run('hidden3/weights:0'))
             biases = tf.constant(sess1.run('hidden3/biases:0'))
-            features = tf.nn.relu6(tf.matmul(hidden2, weights) + biases)
+            features = tf.matmul(hidden2, weights) + biases
 
     with tf.name_scope('map_to_features'):
 
@@ -194,7 +194,7 @@ with g2.as_default():
             weights = tf.Variable(tf.truncated_normal([d_hid2_feat, d_feat], stddev=1 / sqrt(float(d_feat))),
                                   name='weights')
             biases = tf.Variable(tf.zeros([d_feat]), name='biases')
-            outputs = tf.nn.relu6(tf.matmul(hidden2, weights) + biases)
+            outputs = tf.matmul(hidden2, weights) + biases
             tf.histogram_summary('weights3', weights)
             tf.histogram_summary('biases3', biases)
             tf.histogram_summary('errors2', outputs - features)
