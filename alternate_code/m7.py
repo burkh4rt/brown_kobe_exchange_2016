@@ -3,7 +3,7 @@ import numpy as np
 from math import sqrt
 
 # grab data
-npzfile = np.load('../Flint_2012_e1_PCA.npz')
+npzfile = np.load('Flint_2012_e1_PCA.npz')
 all_time = npzfile['all_time']
 all_velocities = npzfile['all_velocities']
 all_neural = npzfile['all_neural']
@@ -33,10 +33,17 @@ def velocities(ind):
     return all_velocities[:, ind + 29].T
 
 
+
 g1 = tf.Graph()  # this graph is for building features
 
+# choice parameters
 d_hid1, d_hid2, d_feat = 100, 50, 3
 d_hid1_feat, d_hid2_feat = 30, 10
+
+activation_fn = tf.nn.relu6
+training_fn =tf.train.AdagradOptimizer
+keep_prob1 = 1
+keep_prob2 = 0.5
 
 
 # Tell TensorFlow that the model will be built into the default Graph.
@@ -54,9 +61,10 @@ with g1.as_default():
     with tf.name_scope('hidden1'):
         weights = tf.Variable(tf.truncated_normal([d_neural, d_hid1], stddev=1 / sqrt(float(d_hid1))), name='weights')
         biases = tf.Variable(tf.zeros([d_hid1]), name='biases')
-        hidden1 = tf.nn.relu6(tf.matmul(neural_, weights) + biases)
+        hidden1 = activation_fn(tf.matmul(neural_, weights) + biases)
         tf.histogram_summary('weights1', weights)
         tf.histogram_summary('biases1', biases)
+
 
     with tf.name_scope('dropout1'):
         hidden1_dropped = tf.nn.dropout(hidden1, keep_prob_)
@@ -64,7 +72,7 @@ with g1.as_default():
     with tf.name_scope('hidden2'):
         weights = tf.Variable(tf.truncated_normal([d_hid1, d_hid2], stddev=1 / sqrt(float(d_hid2))), name='weights')
         biases = tf.Variable(tf.zeros([d_hid2]), name='biases')
-        hidden2 = tf.nn.relu6(tf.matmul(hidden1_dropped, weights) + biases)
+        hidden2 = activation_fn(tf.matmul(hidden1_dropped, weights) + biases)
         tf.histogram_summary('weights2', weights)
         tf.histogram_summary('biases2', biases)
 
@@ -74,7 +82,7 @@ with g1.as_default():
     with tf.name_scope('hidden3'):
         weights = tf.Variable(tf.truncated_normal([d_hid2, d_feat], stddev=1 / sqrt(float(d_feat))), name='weights')
         biases = tf.Variable(tf.zeros([d_feat]), name='biases')
-        features = tf.nn.relu6(tf.matmul(hidden2_dropped, weights) + biases)
+        features = activation_fn(tf.matmul(hidden2_dropped, weights) + biases)
         tf.histogram_summary('weights3', weights)
         tf.histogram_summary('biases3', biases)
         tf.histogram_summary('features', features)
@@ -92,7 +100,7 @@ with g1.as_default():
         loss = tf.reduce_mean(tf.squared_difference(outputs, velocities_), name='mse')
         tf.histogram_summary('loss', loss)
 
-    optimizer = tf.train.AdagradOptimizer(0.01)
+    optimizer = training_fn(0.01)
     # optimizer = tf.train.RMSPropOptimizer(0.1)
 
     # train_op = optimizer.minimize(loss)
@@ -109,15 +117,13 @@ with g1.as_default():
     init = tf.initialize_all_variables()
 
     # Create a saver for writing training checkpoints.
-    saver = tf.train.Saver(sharded=True)
+    saver = tf.train.Saver()
 
     # Create a session for training g1
     sess1 = tf.Session(graph=g1)
 
     # Instantiate a SummaryWriter to output summaries and the Graph.
-    summary_writer = tf.train.SummaryWriter('../writers/1', sess1.graph)
-
-    tf.train.write_graph(g1.as_graph_def(), '../writers/1', 'g1.pbtxt')
+    summary_writer = tf.train.SummaryWriter('/users/guest052/brown_kobe_exchange_2016-master-2',  sess1.graph)
 
     # Run the Op to initialize the variables.
     sess1.run(init)
@@ -127,14 +133,14 @@ with g1.as_default():
         # randomly grab a training set
         idx = np.random.choice(T, 100, replace=False)
         if i % 10 == 0:  # every 10th step we run our validation step to see how we're doing
-            f_dict = {neural_: neural(idx), velocities_: velocities(idx), keep_prob_: 1}
+            f_dict = {neural_: neural(idx), velocities_: velocities(idx), keep_prob_:keep_prob1}
             [summary, vali] = sess1.run([summary_op, val_op], feed_dict=f_dict)
             summary_writer.add_summary(summary, i)
             print('Accuracy at step %s: %s' % (i, vali))
-            save_path = saver.save(sess1, "../writers/1/model.ckpt")
+            save_path = saver.save(sess1, "/users/guest052/brown_kobe_exchange_2016-master-2/model.ckpt")
             print("Model saved in file: %s" % save_path)
         else:  # if we're not on a 10th step then we do a regular training step
-            f_dict = {neural_: neural(idx), velocities_: velocities(idx), keep_prob_: 0.5}
+            f_dict = {neural_: neural(idx), velocities_: velocities(idx), keep_prob_: keep_prob2}
             [summary, _] = sess1.run([summary_op, train_op], feed_dict=f_dict)
             summary_writer.add_summary(summary, i)
 
@@ -158,12 +164,12 @@ with g2.as_default():
         with tf.name_scope('hidden1'):
             weights = tf.constant(sess1.run('hidden1/weights:0'))
             biases = tf.constant(sess1.run('hidden1/biases:0'))
-            hidden1 = tf.nn.relu6(tf.matmul(neural_, weights) + biases)
+            hidden1 = activation_fn(tf.matmul(neural_, weights) + biases)
 
         with tf.name_scope('hidden2'):
             weights = tf.constant(sess1.run('hidden2/weights:0'))
             biases = tf.constant(sess1.run('hidden2/biases:0'))
-            hidden2 = tf.nn.relu6(tf.matmul(hidden1, weights) + biases)
+            hidden2 = activation_fn(tf.matmul(hidden1, weights) + biases)
 
         with tf.name_scope('features'):
             weights = tf.constant(sess1.run('hidden3/weights:0'))
@@ -176,7 +182,7 @@ with g2.as_default():
             weights = tf.Variable(tf.truncated_normal([d_velocities, d_hid1_feat],
                                                       stddev=1 / sqrt(float(d_hid1_feat))), name='weights')
             biases = tf.Variable(tf.zeros([d_hid1_feat]), name='biases')
-            hidden1 = tf.nn.relu6(tf.matmul(velocities_, weights) + biases)
+            hidden1 = activation_fn(tf.matmul(velocities_, weights) + biases)
             tf.histogram_summary('weights1', weights)
             tf.histogram_summary('biases1', biases)
 
@@ -187,7 +193,7 @@ with g2.as_default():
             weights = tf.Variable(tf.truncated_normal([d_hid1_feat, d_hid2_feat],
                                                       stddev=1 / sqrt(float(d_hid2_feat))), name='weights')
             biases = tf.Variable(tf.zeros([d_hid2_feat]), name='biases')
-            hidden2 = tf.nn.relu6(tf.matmul(hidden1_dropped, weights) + biases)
+            hidden2 = activation_fn(tf.matmul(hidden1_dropped, weights) + biases)
             tf.histogram_summary('weights2', weights)
             tf.histogram_summary('biases2', biases)
 
@@ -204,7 +210,7 @@ with g2.as_default():
         loss = tf.reduce_mean(tf.squared_difference(outputs, features), name='mse')
         tf.histogram_summary('loss', loss)
 
-    optimizer = tf.train.AdagradOptimizer(0.1)
+    optimizer = training_fn(0.01)
     # train_op = optimizer.minimize(loss)
     train_op = optimizer.minimize(loss)
 
@@ -219,15 +225,13 @@ with g2.as_default():
     init = tf.initialize_all_variables()
 
     # Create a saver for writing training checkpoints.
-    saver = tf.train.Saver(sharded=True)
+    saver = tf.train.Saver()
 
     # Create a session for training g1
     sess2 = tf.Session(graph=g2)
 
     # Instantiate a SummaryWriter to output summaries and the Graph.
-    summary_writer = tf.train.SummaryWriter('../writers/2', sess2.graph)
-
-    tf.train.write_graph(g2.as_graph_def(), '../writers/2', 'g2.pbtxt')
+    summary_writer = tf.train.SummaryWriter('/users/guest052/brown_kobe_exchange_2016-master-2', sess2.graph)
 
     # Run the Op to initialize the variables.
     sess2.run(init)
@@ -237,17 +241,16 @@ with g2.as_default():
         # randomly grab a training set
         idx = np.random.choice(T, 1000, replace=False)
         if i % 10 == 0:  # every 10th step we run our validation step to see how we're doing
-            f_dict = {neural_: neural(idx), velocities_: velocities(idx), keep_prob_: 1}
+            f_dict = {neural_: neural(idx), velocities_: velocities(idx), keep_prob_: keep_prob1}
             [summary, vali] = sess2.run([summary_op, val_op], feed_dict=f_dict)
             summary_writer.add_summary(summary, i)
             print('Accuracy at step %s: %s' % (i, vali))
-            save_path = saver.save(sess2, "../writers/2/model.ckpt")
+            save_path = saver.save(sess2, "/users/guest052/brown_kobe_exchange_2016-master-2/model.ckpt")
             print("Model saved in file: %s" % save_path)
         else:  # if we're not on a 10th step then we do a regular training step
-            f_dict = {neural_: neural(idx), velocities_: velocities(idx), keep_prob_: 0.5}
+            f_dict = {neural_: neural(idx), velocities_: velocities(idx), keep_prob_: keep_prob2}
             [summary, _] = sess2.run([summary_op, train_op], feed_dict=f_dict)
             summary_writer.add_summary(summary, i)
-
 
 # collect model parameters
 f_hidden1_weights = sess1.run('hidden1/weights:0')
@@ -270,8 +273,10 @@ np.savez('neural_net_parameters', f_hidden1_weights=f_hidden1_weights, f_hidden1
          g_hidden2_weights=g_hidden2_weights, g_hidden2_biases=g_hidden2_biases)
 
 
+
 """
 look at output with:
-tensorboard --logdir=../writers/1
-tensorboard --logdir=../writers/2
+tensorboard --logdir=/Users/michael/Documents/brown/kobe/data/writers/1
+tensorboard --logdir=/Users/michael/Documents/brown/kobe/data/writers/2
 """
+
