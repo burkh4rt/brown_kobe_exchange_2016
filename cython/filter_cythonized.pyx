@@ -16,7 +16,7 @@ cdef int d_neural = 600
 cdef int d_velocities = 2
 
 # load Kalman parameters
-param_file = np.load('/Users/michael/Documents/brown/kobe/data/kalman_estimates.npz')
+param_file = np.load('/../kalman_estimates.npz')
 
 cdef np.ndarray A_est = param_file['A_est']
 cdef np.ndarray S_est = param_file['S_est']
