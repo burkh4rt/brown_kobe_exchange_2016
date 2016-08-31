@@ -16,7 +16,7 @@ cdef int d_neural = 600
 cdef int d_velocities = 2
 
 # load Kalman parameters
-param_file = np.load('/../kalman_estimates.npz')
+param_file = np.load('../kalman_estimates.npz')
 
 cdef np.ndarray A_est = param_file['A_est']
 cdef np.ndarray S_est = param_file['S_est']
@@ -25,7 +25,7 @@ cdef np.ndarray Q_est = param_file['Q_est']
 
 cdef np.ndarray Q_est_inv = np.linalg.inv(Q_est)
 
-data_file = np.load('/Users/michael/Documents/brown/kobe/data/Flint_2012_e1_PCA.npz')
+data_file = np.load('../Flint_2012_e1_PCA.npz')
 
 cdef int all_time = data_file['all_time']
 cdef np.ndarray all_velocities = data_file['all_velocities']

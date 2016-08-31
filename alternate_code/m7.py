@@ -3,7 +3,7 @@ import numpy as np
 from math import sqrt
 
 # grab data
-npzfile = np.load('/Users/michael/Documents/brown/kobe/data/Flint_2012_e1_PCA.npz')
+npzfile = np.load('../Flint_2012_e1_PCA.npz')
 all_time = npzfile['all_time']
 all_velocities = npzfile['all_velocities']
 all_neural = npzfile['all_neural']
@@ -116,7 +116,7 @@ with g1.as_default():
     sess1 = tf.Session(graph=g1)
 
     # Instantiate a SummaryWriter to output summaries and the Graph.
-    summary_writer = tf.train.SummaryWriter('/Users/michael/Documents/brown/kobe/data/writers/1', sess1.graph)
+    summary_writer = tf.train.SummaryWriter('../writers/1', sess1.graph)
 
     # Run the Op to initialize the variables.
     sess1.run(init)
@@ -130,7 +130,7 @@ with g1.as_default():
             [summary, vali] = sess1.run([summary_op, val_op], feed_dict=f_dict)
             summary_writer.add_summary(summary, i)
             print('Accuracy at step %s: %s' % (i, vali))
-            save_path = saver.save(sess1, "/Users/michael/Documents/brown/kobe/data/writers/1/model.ckpt")
+            save_path = saver.save(sess1, "../writers/1/model.ckpt")
             print("Model saved in file: %s" % save_path)
         else:  # if we're not on a 10th step then we do a regular training step
             f_dict = {neural_: neural(idx), velocities_: velocities(idx), keep_prob_: 0.5}
@@ -224,7 +224,7 @@ with g2.as_default():
     sess2 = tf.Session(graph=g2)
 
     # Instantiate a SummaryWriter to output summaries and the Graph.
-    summary_writer = tf.train.SummaryWriter('/Users/michael/Documents/brown/kobe/data/writers/2', sess2.graph)
+    summary_writer = tf.train.SummaryWriter('../writers/2', sess2.graph)
 
     # Run the Op to initialize the variables.
     sess2.run(init)
@@ -238,7 +238,7 @@ with g2.as_default():
             [summary, vali] = sess2.run([summary_op, val_op], feed_dict=f_dict)
             summary_writer.add_summary(summary, i)
             print('Accuracy at step %s: %s' % (i, vali))
-            save_path = saver.save(sess2, "/Users/michael/Documents/brown/kobe/data/writers/2/model.ckpt")
+            save_path = saver.save(sess2, "../writers/2/model.ckpt")
             print("Model saved in file: %s" % save_path)
         else:  # if we're not on a 10th step then we do a regular training step
             f_dict = {neural_: neural(idx), velocities_: velocities(idx), keep_prob_: 0.5}
