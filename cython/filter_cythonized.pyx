@@ -79,5 +79,30 @@ cdef weight_update(np.ndarray[np.float64_t, ndim=2] particles, np.ndarray[np.flo
             log_weights[p] += -0.5*dist[p, i]*diff[p, i]
     for p in range(n_particles):
         new_weights[p, 0] = log_weights[p]
+    min_value = np.min(np.min(new_weights))
+    for p in range(n_particles):
+        new_weights[p, 0] = exp(new_weights[p, 0] - min_value)
+    sum_value = np.sum(np.sum(new_weights))
+    for p in range(n_particles):
+        new_weights[p, 0] = new_weights[p, 0]/sum_value
+    return new_weights
 
-new_weights = weight_update(particles, weights, observation, C_est, Q_est_inv)
+cdef np.ndarray all_particles = np.zeros((n_test, n_particles, d_velocities))
+cdef np.ndarray all_weights = np.zeros((n_test, n_particles, 1))
+cdef np.ndarray all_est = np.zeros((n_test, d_velocities))
+cdef np.ndarray all_true = np.zeros((n_test, d_velocities))
+
+for t in range(n_test):
+    # grab observation
+    observation = all_neural[:, t:t+30].flatten()[:, None]
+    # resample particles
+    particles, weights = resample(particles, weights)
+    # update particle locations
+    all_particles[t, :, :] = particles = np.matmul(A_est, particles.T).T + np.random.multivariate_normal(np.zeros(d_velocities), S_est, n_particles)
+    # update weights
+    all_weights[t, :, :] = weights = weight_update(particles, weights, observation, C_est, Q_est_inv)
+    all_est[t, :] = np.matmul(weights.T, particles)
+    all_true[t, :] = all_velocities[:, t+30]
+
+np.savez('filter_run', all_particles=all_particles, all_weights=all_weights, all_est=all_est, all_true=all_true)
+
