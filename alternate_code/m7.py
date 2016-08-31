@@ -117,13 +117,15 @@ with g1.as_default():
     init = tf.initialize_all_variables()
 
     # Create a saver for writing training checkpoints.
-    saver = tf.train.Saver()
+    saver = tf.train.Saver(sharded=True)
 
     # Create a session for training g1
     sess1 = tf.Session(graph=g1)
 
     # Instantiate a SummaryWriter to output summaries and the Graph.
-    summary_writer = tf.train.SummaryWriter('/users/guest052/brown_kobe_exchange_2016-master-2',  sess1.graph)
+    summary_writer = tf.train.SummaryWriter('../writers/1',  sess1.graph)
+	
+	tf.train.write_graph(g1.as_graph_def(), '../writers/1', 'g1.pbtxt') 
 
     # Run the Op to initialize the variables.
     sess1.run(init)
@@ -137,7 +139,7 @@ with g1.as_default():
             [summary, vali] = sess1.run([summary_op, val_op], feed_dict=f_dict)
             summary_writer.add_summary(summary, i)
             print('Accuracy at step %s: %s' % (i, vali))
-            save_path = saver.save(sess1, "/users/guest052/brown_kobe_exchange_2016-master-2/model.ckpt")
+            save_path = saver.save(sess1, "../writers/1/model.ckpt")
             print("Model saved in file: %s" % save_path)
         else:  # if we're not on a 10th step then we do a regular training step
             f_dict = {neural_: neural(idx), velocities_: velocities(idx), keep_prob_: keep_prob2}
@@ -225,14 +227,16 @@ with g2.as_default():
     init = tf.initialize_all_variables()
 
     # Create a saver for writing training checkpoints.
-    saver = tf.train.Saver()
+    saver = tf.train.Saver(sharded=True)
 
     # Create a session for training g1
     sess2 = tf.Session(graph=g2)
 
     # Instantiate a SummaryWriter to output summaries and the Graph.
-    summary_writer = tf.train.SummaryWriter('/users/guest052/brown_kobe_exchange_2016-master-2', sess2.graph)
+    summary_writer = tf.train.SummaryWriter('../writers/2', sess2.graph)
 
+	tf.train.write_graph(g2.as_graph_def(), '../writers/2', 'g2.pbtxt') 
+	
     # Run the Op to initialize the variables.
     sess2.run(init)
 
@@ -245,7 +249,7 @@ with g2.as_default():
             [summary, vali] = sess2.run([summary_op, val_op], feed_dict=f_dict)
             summary_writer.add_summary(summary, i)
             print('Accuracy at step %s: %s' % (i, vali))
-            save_path = saver.save(sess2, "/users/guest052/brown_kobe_exchange_2016-master-2/model.ckpt")
+            save_path = saver.save(sess2, "../writers/2/model.ckpt")
             print("Model saved in file: %s" % save_path)
         else:  # if we're not on a 10th step then we do a regular training step
             f_dict = {neural_: neural(idx), velocities_: velocities(idx), keep_prob_: keep_prob2}
@@ -276,7 +280,7 @@ np.savez('neural_net_parameters', f_hidden1_weights=f_hidden1_weights, f_hidden1
 
 """
 look at output with:
-tensorboard --logdir=/Users/michael/Documents/brown/kobe/data/writers/1
-tensorboard --logdir=/Users/michael/Documents/brown/kobe/data/writers/2
+tensorboard --logdir=../writers/1
+tensorboard --logdir=../writers/2
 """
 
