@@ -58,13 +58,9 @@ with g1.as_default():
         tf.histogram_summary('weights1', weights)
         tf.histogram_summary('biases1', biases)
 
-    with tf.name_scope('batch_normalization'):
-        batch_mean1, batch_var1 = tf.nn.moments(hidden1, [0])
-        eps = tf.constant(1e-6)
-        hidden1_normalized = tf.nn.batch_normalization(hidden1, batch_mean1, batch_var1, None, None, eps)
 
     with tf.name_scope('dropout1'):
-        hidden1_dropped = tf.nn.dropout(hidden1_normalized, keep_prob_)
+        hidden1_dropped = tf.nn.dropout(hidden1, keep_prob_)
 
     with tf.name_scope('hidden2'):
         weights = tf.Variable(tf.truncated_normal([d_hid1, d_hid2], stddev=1 / sqrt(float(d_hid2))), name='weights')
@@ -162,11 +158,6 @@ with g2.as_default():
             weights = tf.constant(sess1.run('hidden1/weights:0'))
             biases = tf.constant(sess1.run('hidden1/biases:0'))
             hidden1 = tf.nn.relu6(tf.matmul(neural_, weights) + biases)
-
-        with tf.name_scope('batch_normalization'):
-            batch_mean1, batch_var1 = tf.nn.moments(hidden1, [0])
-            eps = tf.constant(1e-6)
-            hidden1_normalized = tf.nn.batch_normalization(hidden1, batch_mean1, batch_var1, None, None, eps)
 
         with tf.name_scope('hidden2'):
             weights = tf.constant(sess1.run('hidden2/weights:0'))
