@@ -1,3 +1,5 @@
 *.dll
 *.c
 build/*
+*.so
+filter_run.npz
