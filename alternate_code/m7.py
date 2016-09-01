@@ -15,6 +15,7 @@ so we need the previous 30 observations of neural data for each velocity update
 """
 
 T = int(all_time) - 30
+print(T)
 del all_time
 
 d_neural = 30 * all_neural.shape[0]
@@ -41,7 +42,7 @@ d_hid1, d_hid2, d_feat = 100, 50, 3
 d_hid1_feat, d_hid2_feat = 30, 10
 
 activation_fn = tf.nn.relu6
-training_fn =tf.train.AdagradOptimizer
+training_fn =tf.train.FtrlOptimizer
 keep_prob1 = 1
 keep_prob2 = 0.5
 
@@ -125,7 +126,7 @@ with g1.as_default():
     # Instantiate a SummaryWriter to output summaries and the Graph.
     summary_writer = tf.train.SummaryWriter('../writers/1',  sess1.graph)
 	
-	#tf.train.write_graph(g1.as_graph_def(), '../writers/1', 'g1.pbtxt') 
+    tf.train.write_graph(g1.as_graph_def(), '../writers/1', 'g1.pbtxt') 
 
     # Run the Op to initialize the variables.
     sess1.run(init)
@@ -133,16 +134,18 @@ with g1.as_default():
     # training 1
     for i in range(301):
         # randomly grab a training set
-        idx = np.random.choice(T, 100, replace=False)
+        idx_tr = np.random.choice(T-20000, 100, replace=False)
+        idx_te = np.random.choice(20000, 100, replace=False) + T - 20000
+		
         if i % 10 == 0:  # every 10th step we run our validation step to see how we're doing
-            f_dict = {neural_: neural(idx), velocities_: velocities(idx), keep_prob_:keep_prob1}
+            f_dict = {neural_: neural(idx_te), velocities_: velocities(idx_te), keep_prob_:keep_prob1}
             [summary, vali] = sess1.run([summary_op, val_op], feed_dict=f_dict)
             summary_writer.add_summary(summary, i)
             print('Accuracy at step %s: %s' % (i, vali))
             save_path = saver.save(sess1, "../writers/1/model.ckpt")
             print("Model saved in file: %s" % save_path)
         else:  # if we're not on a 10th step then we do a regular training step
-            f_dict = {neural_: neural(idx), velocities_: velocities(idx), keep_prob_: keep_prob2}
+            f_dict = {neural_: neural(idx_tr), velocities_: velocities(idx_tr), keep_prob_: keep_prob1}
             [summary, _] = sess1.run([summary_op, train_op], feed_dict=f_dict)
             summary_writer.add_summary(summary, i)
 
@@ -213,7 +216,6 @@ with g2.as_default():
         tf.histogram_summary('loss', loss)
 
     optimizer = training_fn(0.01)
-    # train_op = optimizer.minimize(loss)
     train_op = optimizer.minimize(loss)
 
     with tf.name_scope('validation'):
@@ -235,7 +237,7 @@ with g2.as_default():
     # Instantiate a SummaryWriter to output summaries and the Graph.
     summary_writer = tf.train.SummaryWriter('../writers/2', sess2.graph)
 
-	#tf.train.write_graph(g2.as_graph_def(), '../writers/2', 'g2.pbtxt') 
+    tf.train.write_graph(g2.as_graph_def(), '../writers/2', 'g2.pbtxt') 
 	
     # Run the Op to initialize the variables.
     sess2.run(init)
@@ -243,16 +245,17 @@ with g2.as_default():
     # training 2
     for i in range(301):
         # randomly grab a training set
-        idx = np.random.choice(T, 1000, replace=False)
+        idx_tr = np.random.choice(T - 20000, 10000, replace=False)
+       	idx_te = np.random.choice(20000, 10000, replace=False) + T - 20000
         if i % 10 == 0:  # every 10th step we run our validation step to see how we're doing
-            f_dict = {neural_: neural(idx), velocities_: velocities(idx), keep_prob_: keep_prob1}
+            f_dict = {neural_: neural(idx_te), velocities_: velocities(idx_te), keep_prob_: keep_prob2}
             [summary, vali] = sess2.run([summary_op, val_op], feed_dict=f_dict)
             summary_writer.add_summary(summary, i)
             print('Accuracy at step %s: %s' % (i, vali))
             save_path = saver.save(sess2, "../writers/2/model.ckpt")
             print("Model saved in file: %s" % save_path)
         else:  # if we're not on a 10th step then we do a regular training step
-            f_dict = {neural_: neural(idx), velocities_: velocities(idx), keep_prob_: keep_prob2}
+            f_dict = {neural_: neural(idx_tr), velocities_: velocities(idx_tr), keep_prob_: keep_prob2}
             [summary, _] = sess2.run([summary_op, train_op], feed_dict=f_dict)
             summary_writer.add_summary(summary, i)
 
