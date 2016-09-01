@@ -17,14 +17,14 @@ cdef int d_neural = 600
 cdef int d_velocities = 2
 
 # load Kalman parameters
-param_file = np.load('/Users/michael/Documents/brown/kobe/data/kalman_estimates.npz')
+param_file = np.load('../kalman_estimates.npz')
 
 cdef np.ndarray A_est = param_file['A_est']
 cdef np.ndarray S_est = param_file['S_est']
 cdef double[:, :] Q_est_inv = np.eye(3)
 
 # load neural network parameters
-param_file = np.load('/Users/michael/Documents/brown/kobe/data/neural_net_parameters.npz')
+param_file = np.load('../neural_net_parameters.npz')
 
 cdef np.ndarray f_hidden1_weights = param_file['f_hidden1_weights']
 cdef np.ndarray f_hidden1_biases = param_file['f_hidden1_biases']
@@ -40,7 +40,7 @@ cdef float[:] g_hidden2_biases = param_file['g_hidden2_biases']
 cdef float[:,:] g_output_weights = param_file['g_output_weights']
 cdef float[:] g_output_biases = param_file['g_output_biases']
 
-data_file = np.load('/Users/michael/Documents/brown/kobe/data/Flint_2012_e1_PCA.npz')
+data_file = np.load('../Flint_2012_e1_PCA.npz')
 
 cdef int all_time = data_file['all_time']
 cdef np.ndarray all_velocities = data_file['all_velocities']
