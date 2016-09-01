@@ -1,7 +1,7 @@
 import numpy as np
 from evtk.hl import pointsToVTK
 
-data_file = np.load('../filter_run.npz')
+data_file = np.load('./filter_run.npz')
 all_particles = data_file['all_particles']
 all_weights = data_file['all_weights']
 all_est = data_file['all_est']
