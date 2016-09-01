@@ -43,8 +43,8 @@ d_hid1_feat, d_hid2_feat = 30, 10
 
 activation_fn = tf.nn.relu6
 training_fn =tf.train.FtrlOptimizer
-keep_prob1 = 1
-keep_prob2 = 0.5
+keep_prob1 = 0.75
+keep_prob2 = 0.75
 
 
 # Tell TensorFlow that the model will be built into the default Graph.
@@ -101,7 +101,7 @@ with g1.as_default():
         loss = tf.reduce_mean(tf.squared_difference(outputs, velocities_), name='mse')
         tf.histogram_summary('loss', loss)
 
-    optimizer = training_fn(0.01)
+    optimizer = training_fn(0.0001)
     # optimizer = tf.train.RMSPropOptimizer(0.1)
 
     # train_op = optimizer.minimize(loss)
@@ -134,16 +134,17 @@ with g1.as_default():
     # training 1
     for i in range(301):
         # randomly grab a training set
-        idx_tr = np.random.choice(T-20000, 100, replace=False)
-        idx_te = np.random.choice(20000, 100, replace=False) + T - 20000
+        idx_tr = np.random.choice(T-20000, 10000, replace=False)
+        idx_te = np.random.choice(20000, 10000, replace=False) + T - 20000
 		
-        if i % 10 == 0:  # every 10th step we run our validation step to see how we're doing
+        if i % 50 == 0:  # every 10th step we run our validation step to see how we're doing
             f_dict = {neural_: neural(idx_te), velocities_: velocities(idx_te), keep_prob_:keep_prob1}
-            [summary, vali] = sess1.run([summary_op, val_op], feed_dict=f_dict)
+            [summary, vali, feai] = sess1.run([summary_op, val_op, features], feed_dict=f_dict)
             summary_writer.add_summary(summary, i)
             print('Accuracy at step %s: %s' % (i, vali))
             save_path = saver.save(sess1, "../writers/1/model.ckpt")
             print("Model saved in file: %s" % save_path)
+            print("Features are: %s" % feai)
         else:  # if we're not on a 10th step then we do a regular training step
             f_dict = {neural_: neural(idx_tr), velocities_: velocities(idx_tr), keep_prob_: keep_prob1}
             [summary, _] = sess1.run([summary_op, train_op], feed_dict=f_dict)
@@ -247,7 +248,7 @@ with g2.as_default():
         # randomly grab a training set
         idx_tr = np.random.choice(T - 20000, 10000, replace=False)
        	idx_te = np.random.choice(20000, 10000, replace=False) + T - 20000
-        if i % 10 == 0:  # every 10th step we run our validation step to see how we're doing
+        if i % 50 == 0:  # every 10th step we run our validation step to see how we're doing
             f_dict = {neural_: neural(idx_te), velocities_: velocities(idx_te), keep_prob_: keep_prob2}
             [summary, vali] = sess2.run([summary_op, val_op], feed_dict=f_dict)
             summary_writer.add_summary(summary, i)

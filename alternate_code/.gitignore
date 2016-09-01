@@ -1,3 +1,5 @@
 neural_net_parameters.npz
 ../writers/*
-../writers/
+../writers
+testfile.py
+testfile.py~
