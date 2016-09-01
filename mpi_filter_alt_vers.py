@@ -14,7 +14,7 @@ rank = comm.Get_rank()
 size = comm.Get_size()
 
 # describe our data
-n_test = 500
+n_test = 10
 n_steps = 30
 
 d_neural = 600

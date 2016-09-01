@@ -25,14 +25,16 @@ Q_estinv = np.linalg.inv(Q_est)
 
 #TODO: Update for your local environment
 #file_location = 'C:/Users/Ankan/Documents/Kobe_2016/Project'
-file_location = '/users/guest055/scratch/Project/bke2016'
+#file_location = '/users/guest055/scratch/Project/bke2016'
+file_location = '/home/ankan/Documents/Kobe2016/Project/brown_kobe_exchange_2016'
 
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 size = comm.Get_size()
 #name = MPI.Get_processor_name()
 
-n_test = 1000
+#n_test = 1000
+n_test = 10
 n_steps = 30
 batch_size = 1000
 d_neural = 600
@@ -69,12 +71,15 @@ weight = np.ones(1)
 particle_log_weight = np.hstack((particle, log_weight))
 particle_weight = np.hstack((particle,weight))
 particles_weights = None
-particles_log_weights = None
+particles_log_weights = np.hstack((particles, log_weights))
 
 if rank == 0:
     particles = np.random.multivariate_normal(np.zeros(2), np.eye(2), size)
     weights = np.ones((size, 1))/size
+    log_weights = np.log(weights)
+
     particles_weights = np.hstack((particles, weights))     #dim 3 horizontal np_array
+    particles_log_weights = np.hstack((particles, log_weights))
 
 comm.Scatter(particles_weights, particle_weight)
 particle = particle_weight[:d_velocities, ]
@@ -91,7 +96,15 @@ for t in range(n_test):
 
         #Resample #TODO: parallelize
         particle_resampling = np.random.multinomial(1, weights.flatten(), size)
-        particles = np.matmul(particle_resampling, particles)
+        
+	print('particles')
+	print(particles)
+	print('weights')
+	print(weights)
+	print('resampling')
+	print(particle_resampling)
+
+	particles = np.matmul(particle_resampling, particles)
         weights = np.ones((size,1))/size
         particles_weights = np.hstack((particles,weights))
 
@@ -100,12 +113,12 @@ for t in range(n_test):
     comm.Scatter(particles_weights, particle_weight)
 
     #Update resampled particles and uniform weights
-    particle = particle_weight[:d_velocities, ]
+    particle = particle_weight[:d_velocities, ] #vector of dim 2
     weight = particle_weight[d_velocities:, ]
     log_weight = np.log(weight)
 
     #Update particles with time
-    particle = np.matmul(A_est, particle) + np.random.normal(np.zeros(2), S_est);
+    particle = np.matmul(A_est, particle) + np.random.multivariate_normal(np.zeros(2), S_est);
 
     #Update weights
     #log_weight = sp.stats.multivariate_normal.pdf(observation.T,
@@ -113,9 +126,13 @@ for t in range(n_test):
     #                                          cov = Q_est))
     mean_pred_weight = np.matmul(C_est, particle)
     cov_pred_weight = Q_est
-    log_weight = -np.matmul(np.matmul(np.subtract(observation.T,mean_pred_weight.T),
-                                      Q_estinv),
-                            np.subtract(observation,mean_pred_weight))/2
+    diff = np.subtract(observation.flatten(),mean_pred_weight)
+    log_weight = np.matmul(diff.T, Q_estinv)
+    log_weight = np.matmul(log_weight, diff)
+    log_weight = -log_weight/2
+    #log_weight = -np.matmul(np.matmul(np.subtract(observation.T,mean_pred_weight.T),
+    #                                  Q_estinv),
+    #                        np.subtract(observation,mean_pred_weight))/2
     particle_log_weight = np.hstack((particle,log_weight))
 
     #Make sure all particle_weight arrays are set before sharing with root
@@ -128,7 +145,7 @@ for t in range(n_test):
     if rank==0:
         particles = particles_weights[:d_velocities, ]
         log_weights = particles_log_weights[d_velocities:, ]
-        log_weights = log_weights - max(log_weights)
+        log_weights = log_weights - np.amax(log_weights)
         weights = np.exp(log_weights)
 
         #Renormalize weights
