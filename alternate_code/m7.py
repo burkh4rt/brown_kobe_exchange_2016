@@ -1,12 +1,13 @@
 import tensorflow as tf
 import numpy as np
+import scipy.stats as sp
 from math import sqrt
 
 # grab data
 npzfile = np.load('../Flint_2012_e1_PCA.npz')
 all_time = npzfile['all_time']
-all_velocities = npzfile['all_velocities']
-all_neural = npzfile['all_neural']
+file_velocities = npzfile['all_velocities']
+file_neural = npzfile['all_neural']
 
 """
 data is sampled every 0.01s;
@@ -15,12 +16,28 @@ so we need the previous 30 observations of neural data for each velocity update
 """
 
 T = int(all_time) - 30
-print(T)
 del all_time
 
-d_neural = 30 * all_neural.shape[0]
-d_velocities = all_velocities.shape[0]
+d_neural = 30 * file_neural.shape[0]
+d_velocities = file_velocities.shape[0]
 
+#Normalize velocities and neural data
+# mean_deviated_velocities = file_velocities - np.tile(np.reshape(np.mean(file_velocities,1), (d_velocities,1)), (1,T+30))
+# stddev_velocities = np.reshape(np.std(file_velocities, axis=1), (d_velocities,1))
+# all_velocities = np.divide(mean_deviated_velocities, np.tile(stddev_velocities, (1,T+30)))
+
+# mean_deviated_neural = file_neural - np.tile(np.reshape(np.mean(file_neural,1), (d_neural/30,1)), (1,T+30))
+# stddev_neural = np.reshape(np.std(file_neural, axis=1), (d_neural/30,1))
+# all_neural = np.divide(mean_deviated_neural, np.tile(stddev_neural, (1,T+30)))
+
+#all_velocities = all_velocities*10 #Extra normalization factor to scale more easily
+#all_neural = all_neural/10
+
+all_velocities = file_velocities
+all_neural = file_neural
+
+del file_velocities, file_neural
+#del mean_deviated_velocities, mean_deviated_neural
 
 def neural(ind):
     neur = np.zeros((ind.size, d_neural))
@@ -41,7 +58,7 @@ g1 = tf.Graph()  # this graph is for building features
 d_hid1, d_hid2, d_feat = 100, 50, 3
 d_hid1_feat, d_hid2_feat = 30, 10
 
-activation_fn = tf.nn.relu6
+activation_fn = tf.nn.softsign
 training_fn =tf.train.FtrlOptimizer
 keep_prob1 = 0.75
 keep_prob2 = 0.75
@@ -101,7 +118,7 @@ with g1.as_default():
         loss = tf.reduce_mean(tf.squared_difference(outputs, velocities_), name='mse')
         tf.histogram_summary('loss', loss)
 
-    optimizer = training_fn(0.0001)
+    optimizer = training_fn(0.001)
     # optimizer = tf.train.RMSPropOptimizer(0.1)
 
     # train_op = optimizer.minimize(loss)
@@ -134,8 +151,8 @@ with g1.as_default():
     # training 1
     for i in range(301):
         # randomly grab a training set
-        idx_tr = np.random.choice(T-20000, 10000, replace=False)
-        idx_te = np.random.choice(20000, 10000, replace=False) + T - 20000
+        idx_tr = np.random.choice(T-20000, 1000, replace=False)
+        idx_te = np.random.choice(20000, 1000, replace=False) + T - 20000
 		
         if i % 50 == 0:  # every 10th step we run our validation step to see how we're doing
             f_dict = {neural_: neural(idx_te), velocities_: velocities(idx_te), keep_prob_:keep_prob1}
