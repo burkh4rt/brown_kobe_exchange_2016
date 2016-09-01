@@ -124,7 +124,6 @@ for t in range(n_test):
             for j in range(size2):
                 g_out[p, i] += g_hidden2[p, j] * g_output_weights[i,j]
             g_out[p, i] += g_output_biases[i]
-            g_out[p, i] = min(max(g_out[p, i], 0),6)
         log_weights[p] = 0
         for i in range(size_out):
             diffs[p, i] = g_out[p, i] - c_features[i, 0]
