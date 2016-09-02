@@ -1,15 +1,17 @@
 """
 Steps to display these files:
-	1: Open Paraview
-	2: Go to Sources (in the top tab) and select "Programmable Source"
-	3: In the Script box, paste the code below
-	4: Click Apply
-	5: Adjust the color of the line and background as necessary
+	1: Change line 15 to contain the correct directory. Use absolute directories.
+	2: Open Paraview
+	3: Go to Sources (in the top tab) and select "Programmable Source"
+	4: In the Script box, paste the code below
+	5: Click Apply
+	6: Adjust the color of the line and background as necessary
 """
 
 import numpy as np
 
 #Load the data
+#TODO: Change the next line to a correct absolute directory!!!!
 data_file = np.load('C:\\Users\\GuestUser\\Documents\\Project\\brown_kobe_exchange_2016\\pipeline\\filter_run.npz')
 all_particles = data_file['all_particles']
 all_weights = data_file['all_weights']
