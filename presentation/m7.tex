@@ -1,0 +1,419 @@
+
+\documentclass{article}
+\usepackage{fancyvrb}
+\usepackage{color}
+\usepackage[utf8]{inputenc}
+
+
+
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.00,0.53,0.00}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.72,0.53,0.04}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.72,0.53,0.04}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.53,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.72,0.53,0.04}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.53,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.27,0.27}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.27,0.27}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.72,0.53,0.04}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.27,0.27}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.00,0.53,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.27,0.27}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.00,0.53,0.00}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.00,0.53,0.00}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.72,0.53,0.04}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.00,0.53,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.27,0.27}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.73,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.27,0.27}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.27,0.27}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.27,0.27}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+\begin{document}
+
+\section*{}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{tensorflow} \PY{k+kn}{as} \PY{n+nn}{tf}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k+kn}{as} \PY{n+nn}{np}
+\PY{k+kn}{import} \PY{n+nn}{scipy.stats} \PY{k+kn}{as} \PY{n+nn}{sp}
+\PY{k+kn}{from} \PY{n+nn}{math} \PY{k+kn}{import} \PY{n}{sqrt}
+
+\PY{c+c1}{\PYZsh{} grab data}
+\PY{n}{npzfile} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{../Flint\PYZus{}2012\PYZus{}e1\PYZus{}PCA.npz}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{all\PYZus{}time} \PY{o}{=} \PY{n}{npzfile}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{all\PYZus{}time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{file\PYZus{}velocities} \PY{o}{=} \PY{n}{npzfile}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{all\PYZus{}velocities}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{file\PYZus{}neural} \PY{o}{=} \PY{n}{npzfile}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{all\PYZus{}neural}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+
+\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{data is sampled every 0.01s;}
+\PY{l+s+sd}{the paper says the neural data 200\PYZhy{}300ms beforehand is most informative}
+\PY{l+s+sd}{so we need the previous 30 observations of neural data for each velocity update}
+\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+
+\PY{n}{T} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n}{all\PYZus{}time}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{l+m+mi}{30}
+\PY{k}{del} \PY{n}{all\PYZus{}time}
+
+\PY{n}{d\PYZus{}neural} \PY{o}{=} \PY{l+m+mi}{30} \PY{o}{*} \PY{n}{file\PYZus{}neural}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\PY{n}{d\PYZus{}velocities} \PY{o}{=} \PY{n}{file\PYZus{}velocities}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{}Normalize velocities and neural data}
+\PY{c+c1}{\PYZsh{} mean\PYZus{}deviated\PYZus{}velocities = file\PYZus{}velocities \PYZhy{} np.tile(np.reshape(np.mean(file\PYZus{}velocities,1), (d\PYZus{}velocities,1)), (1,T+30))}
+\PY{c+c1}{\PYZsh{} stddev\PYZus{}velocities = np.reshape(np.std(file\PYZus{}velocities, axis=1), (d\PYZus{}velocities,1))}
+\PY{c+c1}{\PYZsh{} all\PYZus{}velocities = np.divide(mean\PYZus{}deviated\PYZus{}velocities, np.tile(stddev\PYZus{}velocities, (1,T+30)))}
+
+\PY{c+c1}{\PYZsh{} mean\PYZus{}deviated\PYZus{}neural = file\PYZus{}neural \PYZhy{} np.tile(np.reshape(np.mean(file\PYZus{}neural,1), (d\PYZus{}neural/30,1)), (1,T+30))}
+\PY{c+c1}{\PYZsh{} stddev\PYZus{}neural = np.reshape(np.std(file\PYZus{}neural, axis=1), (d\PYZus{}neural/30,1))}
+\PY{c+c1}{\PYZsh{} all\PYZus{}neural = np.divide(mean\PYZus{}deviated\PYZus{}neural, np.tile(stddev\PYZus{}neural, (1,T+30)))}
+
+\PY{c+c1}{\PYZsh{}all\PYZus{}velocities = all\PYZus{}velocities*10 \PYZsh{}Extra normalization factor to scale more easily}
+\PY{c+c1}{\PYZsh{}all\PYZus{}neural = all\PYZus{}neural/10}
+
+\PY{n}{all\PYZus{}velocities} \PY{o}{=} \PY{n}{file\PYZus{}velocities}
+\PY{n}{all\PYZus{}neural} \PY{o}{=} \PY{n}{file\PYZus{}neural}
+
+\PY{k}{del} \PY{n}{file\PYZus{}velocities}\PY{p}{,} \PY{n}{file\PYZus{}neural}
+\PY{c+c1}{\PYZsh{}del mean\PYZus{}deviated\PYZus{}velocities, mean\PYZus{}deviated\PYZus{}neural}
+
+\PY{k}{def} \PY{n+nf}{neural}\PY{p}{(}\PY{n}{ind}\PY{p}{)}\PY{p}{:}
+    \PY{n}{neur} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{ind}\PY{o}{.}\PY{n}{size}\PY{p}{,} \PY{n}{d\PYZus{}neural}\PY{p}{)}\PY{p}{)}
+    \PY{k}{for} \PY{n}{i0} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{ind}\PY{o}{.}\PY{n}{size}\PY{p}{)}\PY{p}{:}
+        \PY{n}{s\PYZus{}idx} \PY{o}{=} \PY{n+nb}{range}\PY{p}{(}\PY{n}{ind}\PY{p}{[}\PY{n}{i0}\PY{p}{]}\PY{p}{,} \PY{n}{ind}\PY{p}{[}\PY{n}{i0}\PY{p}{]} \PY{o}{+} \PY{l+m+mi}{30}\PY{p}{)}
+        \PY{n}{neur}\PY{p}{[}\PY{n}{i0}\PY{p}{,} \PY{p}{:}\PY{p}{]} \PY{o}{=} \PY{n}{all\PYZus{}neural}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{s\PYZus{}idx}\PY{p}{]}\PY{o}{.}\PY{n}{flatten}\PY{p}{(}\PY{p}{)}
+    \PY{k}{return} \PY{n}{neur}
+
+
+\PY{k}{def} \PY{n+nf}{velocities}\PY{p}{(}\PY{n}{ind}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{all\PYZus{}velocities}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{ind} \PY{o}{+} \PY{l+m+mi}{29}\PY{p}{]}\PY{o}{.}\PY{n}{T}
+
+
+
+\PY{n}{g1} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{Graph}\PY{p}{(}\PY{p}{)}  \PY{c+c1}{\PYZsh{} this graph is for building features}
+
+\PY{c+c1}{\PYZsh{} choice parameters}
+\PY{n}{d\PYZus{}hid1}\PY{p}{,} \PY{n}{d\PYZus{}hid2}\PY{p}{,} \PY{n}{d\PYZus{}feat} \PY{o}{=} \PY{l+m+mi}{100}\PY{p}{,} \PY{l+m+mi}{50}\PY{p}{,} \PY{l+m+mi}{3}
+\PY{n}{d\PYZus{}hid1\PYZus{}feat}\PY{p}{,} \PY{n}{d\PYZus{}hid2\PYZus{}feat} \PY{o}{=} \PY{l+m+mi}{30}\PY{p}{,} \PY{l+m+mi}{10}
+
+\PY{n}{activation\PYZus{}fn} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{softsign}
+\PY{n}{training\PYZus{}fn} \PY{o}{=}\PY{n}{tf}\PY{o}{.}\PY{n}{train}\PY{o}{.}\PY{n}{FtrlOptimizer}
+\PY{n}{keep\PYZus{}prob1} \PY{o}{=} \PY{l+m+mf}{0.75}
+\PY{n}{keep\PYZus{}prob2} \PY{o}{=} \PY{l+m+mf}{0.75}
+
+
+\PY{c+c1}{\PYZsh{} Tell TensorFlow that the model will be built into the default Graph.}
+\PY{k}{with} \PY{n}{g1}\PY{o}{.}\PY{n}{as\PYZus{}default}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} Generate placeholders for the images and labels.}
+    \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{inputs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n}{neural\PYZus{}} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{placeholder}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{float32}\PY{p}{,} \PY{n}{shape}\PY{o}{=}\PY{p}{[}\PY{n+nb+bp}{None}\PY{p}{,} \PY{n}{d\PYZus{}neural}\PY{p}{]}\PY{p}{)}
+
+    \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{outputs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n}{velocities\PYZus{}} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{placeholder}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{float32}\PY{p}{,} \PY{n}{shape}\PY{o}{=}\PY{p}{[}\PY{n+nb+bp}{None}\PY{p}{,} \PY{n}{d\PYZus{}velocities}\PY{p}{]}\PY{p}{)}
+
+    \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{keep\PYZus{}prob}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n}{keep\PYZus{}prob\PYZus{}} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{placeholder}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{float}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{keep\PYZus{}probability}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+    \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hidden1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n}{weights} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{Variable}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{truncated\PYZus{}normal}\PY{p}{(}\PY{p}{[}\PY{n}{d\PYZus{}neural}\PY{p}{,} \PY{n}{d\PYZus{}hid1}\PY{p}{]}\PY{p}{,} \PY{n}{stddev}\PY{o}{=}\PY{l+m+mi}{1} \PY{o}{/} \PY{n}{sqrt}\PY{p}{(}\PY{n+nb}{float}\PY{p}{(}\PY{n}{d\PYZus{}hid1}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{weights}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{biases} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{Variable}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{[}\PY{n}{d\PYZus{}hid1}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{biases}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{hidden1} \PY{o}{=} \PY{n}{activation\PYZus{}fn}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{matmul}\PY{p}{(}\PY{n}{neural\PYZus{}}\PY{p}{,} \PY{n}{weights}\PY{p}{)} \PY{o}{+} \PY{n}{biases}\PY{p}{)}
+        \PY{n}{tf}\PY{o}{.}\PY{n}{histogram\PYZus{}summary}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{weights1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{weights}\PY{p}{)}
+        \PY{n}{tf}\PY{o}{.}\PY{n}{histogram\PYZus{}summary}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{biases1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{biases}\PY{p}{)}
+
+
+    \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dropout1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n}{hidden1\PYZus{}dropped} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{dropout}\PY{p}{(}\PY{n}{hidden1}\PY{p}{,} \PY{n}{keep\PYZus{}prob\PYZus{}}\PY{p}{)}
+
+    \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hidden2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n}{weights} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{Variable}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{truncated\PYZus{}normal}\PY{p}{(}\PY{p}{[}\PY{n}{d\PYZus{}hid1}\PY{p}{,} \PY{n}{d\PYZus{}hid2}\PY{p}{]}\PY{p}{,} \PY{n}{stddev}\PY{o}{=}\PY{l+m+mi}{1} \PY{o}{/} \PY{n}{sqrt}\PY{p}{(}\PY{n+nb}{float}\PY{p}{(}\PY{n}{d\PYZus{}hid2}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{weights}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{biases} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{Variable}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{[}\PY{n}{d\PYZus{}hid2}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{biases}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{hidden2} \PY{o}{=} \PY{n}{activation\PYZus{}fn}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{matmul}\PY{p}{(}\PY{n}{hidden1\PYZus{}dropped}\PY{p}{,} \PY{n}{weights}\PY{p}{)} \PY{o}{+} \PY{n}{biases}\PY{p}{)}
+        \PY{n}{tf}\PY{o}{.}\PY{n}{histogram\PYZus{}summary}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{weights2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{weights}\PY{p}{)}
+        \PY{n}{tf}\PY{o}{.}\PY{n}{histogram\PYZus{}summary}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{biases2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{biases}\PY{p}{)}
+
+    \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dropout2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n}{hidden2\PYZus{}dropped} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{dropout}\PY{p}{(}\PY{n}{hidden2}\PY{p}{,} \PY{n}{keep\PYZus{}prob\PYZus{}}\PY{p}{)}
+
+    \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hidden3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n}{weights} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{Variable}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{truncated\PYZus{}normal}\PY{p}{(}\PY{p}{[}\PY{n}{d\PYZus{}hid2}\PY{p}{,} \PY{n}{d\PYZus{}feat}\PY{p}{]}\PY{p}{,} \PY{n}{stddev}\PY{o}{=}\PY{l+m+mi}{1} \PY{o}{/} \PY{n}{sqrt}\PY{p}{(}\PY{n+nb}{float}\PY{p}{(}\PY{n}{d\PYZus{}feat}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{weights}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{biases} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{Variable}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{[}\PY{n}{d\PYZus{}feat}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{biases}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{features} \PY{o}{=} \PY{n}{activation\PYZus{}fn}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{matmul}\PY{p}{(}\PY{n}{hidden2\PYZus{}dropped}\PY{p}{,} \PY{n}{weights}\PY{p}{)} \PY{o}{+} \PY{n}{biases}\PY{p}{)}
+        \PY{n}{tf}\PY{o}{.}\PY{n}{histogram\PYZus{}summary}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{weights3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{weights}\PY{p}{)}
+        \PY{n}{tf}\PY{o}{.}\PY{n}{histogram\PYZus{}summary}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{biases3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{biases}\PY{p}{)}
+        \PY{n}{tf}\PY{o}{.}\PY{n}{histogram\PYZus{}summary}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{features}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{features}\PY{p}{)}
+
+    \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{output}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n}{weights} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{Variable}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{truncated\PYZus{}normal}\PY{p}{(}\PY{p}{[}\PY{n}{d\PYZus{}feat}\PY{p}{,} \PY{n}{d\PYZus{}velocities}\PY{p}{]}\PY{p}{,} \PY{n}{stddev}\PY{o}{=}\PY{l+m+mi}{1} \PY{o}{/} \PY{n}{sqrt}\PY{p}{(}\PY{n+nb}{float}\PY{p}{(}\PY{n}{d\PYZus{}velocities}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+                              \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{weights}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{biases} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{Variable}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{[}\PY{n}{d\PYZus{}velocities}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{biases}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{outputs} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{matmul}\PY{p}{(}\PY{n}{features}\PY{p}{,} \PY{n}{weights}\PY{p}{)} \PY{o}{+} \PY{n}{biases}
+        \PY{n}{tf}\PY{o}{.}\PY{n}{histogram\PYZus{}summary}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{weights4}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{weights}\PY{p}{)}
+        \PY{n}{tf}\PY{o}{.}\PY{n}{histogram\PYZus{}summary}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{biases4}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{biases}\PY{p}{)}
+        \PY{n}{tf}\PY{o}{.}\PY{n}{histogram\PYZus{}summary}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{errors1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{outputs} \PY{o}{\PYZhy{}} \PY{n}{velocities\PYZus{}}\PY{p}{)}
+
+    \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{loss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n}{loss} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{reduce\PYZus{}mean}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{squared\PYZus{}difference}\PY{p}{(}\PY{n}{outputs}\PY{p}{,} \PY{n}{velocities\PYZus{}}\PY{p}{)}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mse}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{tf}\PY{o}{.}\PY{n}{histogram\PYZus{}summary}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{loss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{loss}\PY{p}{)}
+
+    \PY{n}{optimizer} \PY{o}{=} \PY{n}{training\PYZus{}fn}\PY{p}{(}\PY{l+m+mf}{0.001}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} optimizer = tf.train.RMSPropOptimizer(0.1)}
+
+    \PY{c+c1}{\PYZsh{} train\PYZus{}op = optimizer.minimize(loss)}
+    \PY{n}{train\PYZus{}op} \PY{o}{=} \PY{n}{optimizer}\PY{o}{.}\PY{n}{minimize}\PY{p}{(}\PY{n}{loss}\PY{p}{)}
+
+    \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{validation}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n}{val\PYZus{}op} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{reduce\PYZus{}mean}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{squared\PYZus{}difference}\PY{p}{(}\PY{n}{outputs}\PY{p}{,} \PY{n}{velocities\PYZus{}}\PY{p}{)}\PY{p}{)}
+        \PY{n}{tf}\PY{o}{.}\PY{n}{scalar\PYZus{}summary}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{validation}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{val\PYZus{}op}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Build the summary operation based on the TF collection of Summaries.}
+    \PY{n}{summary\PYZus{}op} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{merge\PYZus{}all\PYZus{}summaries}\PY{p}{(}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Add the variable initializer Op.}
+    \PY{n}{init} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{initialize\PYZus{}all\PYZus{}variables}\PY{p}{(}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Create a saver for writing training checkpoints.}
+    \PY{n}{saver} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{train}\PY{o}{.}\PY{n}{Saver}\PY{p}{(}\PY{n}{sharded}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Create a session for training g1}
+    \PY{n}{sess1} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{Session}\PY{p}{(}\PY{n}{graph}\PY{o}{=}\PY{n}{g1}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Instantiate a SummaryWriter to output summaries and the Graph.}
+    \PY{n}{summary\PYZus{}writer} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{train}\PY{o}{.}\PY{n}{SummaryWriter}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{../writers/1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}  \PY{n}{sess1}\PY{o}{.}\PY{n}{graph}\PY{p}{)}
+	
+    \PY{n}{tf}\PY{o}{.}\PY{n}{train}\PY{o}{.}\PY{n}{write\PYZus{}graph}\PY{p}{(}\PY{n}{g1}\PY{o}{.}\PY{n}{as\PYZus{}graph\PYZus{}def}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{../writers/1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{g1.pbtxt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} 
+
+    \PY{c+c1}{\PYZsh{} Run the Op to initialize the variables.}
+    \PY{n}{sess1}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{n}{init}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} training 1}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{301}\PY{p}{)}\PY{p}{:}
+        \PY{c+c1}{\PYZsh{} randomly grab a training set}
+        \PY{n}{idx\PYZus{}tr} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{choice}\PY{p}{(}\PY{n}{T}\PY{o}{\PYZhy{}}\PY{l+m+mi}{20000}\PY{p}{,} \PY{l+m+mi}{1000}\PY{p}{,} \PY{n}{replace}\PY{o}{=}\PY{n+nb+bp}{False}\PY{p}{)}
+        \PY{n}{idx\PYZus{}te} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{choice}\PY{p}{(}\PY{l+m+mi}{20000}\PY{p}{,} \PY{l+m+mi}{1000}\PY{p}{,} \PY{n}{replace}\PY{o}{=}\PY{n+nb+bp}{False}\PY{p}{)} \PY{o}{+} \PY{n}{T} \PY{o}{\PYZhy{}} \PY{l+m+mi}{20000}
+		
+        \PY{k}{if} \PY{n}{i} \PY{o}{\PYZpc{}} \PY{l+m+mi}{50} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}  \PY{c+c1}{\PYZsh{} every 10th step we run our validation step to see how we\PYZsq{}re doing}
+            \PY{n}{f\PYZus{}dict} \PY{o}{=} \PY{p}{\PYZob{}}\PY{n}{neural\PYZus{}}\PY{p}{:} \PY{n}{neural}\PY{p}{(}\PY{n}{idx\PYZus{}te}\PY{p}{)}\PY{p}{,} \PY{n}{velocities\PYZus{}}\PY{p}{:} \PY{n}{velocities}\PY{p}{(}\PY{n}{idx\PYZus{}te}\PY{p}{)}\PY{p}{,} \PY{n}{keep\PYZus{}prob\PYZus{}}\PY{p}{:}\PY{n}{keep\PYZus{}prob1}\PY{p}{\PYZcb{}}
+            \PY{p}{[}\PY{n}{summary}\PY{p}{,} \PY{n}{vali}\PY{p}{,} \PY{n}{feai}\PY{p}{]} \PY{o}{=} \PY{n}{sess1}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{p}{[}\PY{n}{summary\PYZus{}op}\PY{p}{,} \PY{n}{val\PYZus{}op}\PY{p}{,} \PY{n}{features}\PY{p}{]}\PY{p}{,} \PY{n}{feed\PYZus{}dict}\PY{o}{=}\PY{n}{f\PYZus{}dict}\PY{p}{)}
+            \PY{n}{summary\PYZus{}writer}\PY{o}{.}\PY{n}{add\PYZus{}summary}\PY{p}{(}\PY{n}{summary}\PY{p}{,} \PY{n}{i}\PY{p}{)}
+            \PY{k}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Accuracy at step }\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{: }\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{vali}\PY{p}{)}\PY{p}{)}
+            \PY{n}{save\PYZus{}path} \PY{o}{=} \PY{n}{saver}\PY{o}{.}\PY{n}{save}\PY{p}{(}\PY{n}{sess1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{../writers/1/model.ckpt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{k}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Model saved in file: }\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s2}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{n}{save\PYZus{}path}\PY{p}{)}
+            \PY{k}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Features are: }\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s2}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{n}{feai}\PY{p}{)}
+        \PY{k}{else}\PY{p}{:}  \PY{c+c1}{\PYZsh{} if we\PYZsq{}re not on a 10th step then we do a regular training step}
+            \PY{n}{f\PYZus{}dict} \PY{o}{=} \PY{p}{\PYZob{}}\PY{n}{neural\PYZus{}}\PY{p}{:} \PY{n}{neural}\PY{p}{(}\PY{n}{idx\PYZus{}tr}\PY{p}{)}\PY{p}{,} \PY{n}{velocities\PYZus{}}\PY{p}{:} \PY{n}{velocities}\PY{p}{(}\PY{n}{idx\PYZus{}tr}\PY{p}{)}\PY{p}{,} \PY{n}{keep\PYZus{}prob\PYZus{}}\PY{p}{:} \PY{n}{keep\PYZus{}prob1}\PY{p}{\PYZcb{}}
+            \PY{p}{[}\PY{n}{summary}\PY{p}{,} \PY{n}{\PYZus{}}\PY{p}{]} \PY{o}{=} \PY{n}{sess1}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{p}{[}\PY{n}{summary\PYZus{}op}\PY{p}{,} \PY{n}{train\PYZus{}op}\PY{p}{]}\PY{p}{,} \PY{n}{feed\PYZus{}dict}\PY{o}{=}\PY{n}{f\PYZus{}dict}\PY{p}{)}
+            \PY{n}{summary\PYZus{}writer}\PY{o}{.}\PY{n}{add\PYZus{}summary}\PY{p}{(}\PY{n}{summary}\PY{p}{,} \PY{n}{i}\PY{p}{)}
+
+    \PY{n}{learned\PYZus{}variables} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{all\PYZus{}variables}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{g2} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{Graph}\PY{p}{(}\PY{p}{)}  \PY{c+c1}{\PYZsh{} this graph is for mapping velocities to neural via features}
+
+\PY{c+c1}{\PYZsh{} Tell TensorFlow that the model will be built into the default Graph.}
+\PY{k}{with} \PY{n}{g2}\PY{o}{.}\PY{n}{as\PYZus{}default}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} Generate placeholders for the images and labels.}
+    \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{inputs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n}{neural\PYZus{}} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{placeholder}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{float32}\PY{p}{,} \PY{n}{shape}\PY{o}{=}\PY{p}{[}\PY{n+nb+bp}{None}\PY{p}{,} \PY{n}{d\PYZus{}neural}\PY{p}{]}\PY{p}{)}
+
+    \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{outputs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n}{velocities\PYZus{}} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{placeholder}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{float32}\PY{p}{,} \PY{n}{shape}\PY{o}{=}\PY{p}{[}\PY{n+nb+bp}{None}\PY{p}{,} \PY{n}{d\PYZus{}velocities}\PY{p}{]}\PY{p}{)}
+
+    \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{keep\PYZus{}prob}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n}{keep\PYZus{}prob\PYZus{}} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{placeholder}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{float}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{keep\PYZus{}probability}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+    \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{feature\PYZus{}injection}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hidden1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{weights} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{constant}\PY{p}{(}\PY{n}{sess1}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hidden1/weights:0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+            \PY{n}{biases} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{constant}\PY{p}{(}\PY{n}{sess1}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hidden1/biases:0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+            \PY{n}{hidden1} \PY{o}{=} \PY{n}{activation\PYZus{}fn}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{matmul}\PY{p}{(}\PY{n}{neural\PYZus{}}\PY{p}{,} \PY{n}{weights}\PY{p}{)} \PY{o}{+} \PY{n}{biases}\PY{p}{)}
+
+        \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hidden2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{weights} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{constant}\PY{p}{(}\PY{n}{sess1}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hidden2/weights:0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+            \PY{n}{biases} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{constant}\PY{p}{(}\PY{n}{sess1}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hidden2/biases:0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+            \PY{n}{hidden2} \PY{o}{=} \PY{n}{activation\PYZus{}fn}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{matmul}\PY{p}{(}\PY{n}{hidden1}\PY{p}{,} \PY{n}{weights}\PY{p}{)} \PY{o}{+} \PY{n}{biases}\PY{p}{)}
+
+        \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{features}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{weights} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{constant}\PY{p}{(}\PY{n}{sess1}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hidden3/weights:0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+            \PY{n}{biases} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{constant}\PY{p}{(}\PY{n}{sess1}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hidden3/biases:0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+            \PY{n}{features} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{matmul}\PY{p}{(}\PY{n}{hidden2}\PY{p}{,} \PY{n}{weights}\PY{p}{)} \PY{o}{+} \PY{n}{biases}
+
+    \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{map\PYZus{}to\PYZus{}features}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+
+        \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hidden1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{weights} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{Variable}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{truncated\PYZus{}normal}\PY{p}{(}\PY{p}{[}\PY{n}{d\PYZus{}velocities}\PY{p}{,} \PY{n}{d\PYZus{}hid1\PYZus{}feat}\PY{p}{]}\PY{p}{,}
+                                                      \PY{n}{stddev}\PY{o}{=}\PY{l+m+mi}{1} \PY{o}{/} \PY{n}{sqrt}\PY{p}{(}\PY{n+nb}{float}\PY{p}{(}\PY{n}{d\PYZus{}hid1\PYZus{}feat}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{weights}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+            \PY{n}{biases} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{Variable}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{[}\PY{n}{d\PYZus{}hid1\PYZus{}feat}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{biases}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+            \PY{n}{hidden1} \PY{o}{=} \PY{n}{activation\PYZus{}fn}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{matmul}\PY{p}{(}\PY{n}{velocities\PYZus{}}\PY{p}{,} \PY{n}{weights}\PY{p}{)} \PY{o}{+} \PY{n}{biases}\PY{p}{)}
+            \PY{n}{tf}\PY{o}{.}\PY{n}{histogram\PYZus{}summary}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{weights1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{weights}\PY{p}{)}
+            \PY{n}{tf}\PY{o}{.}\PY{n}{histogram\PYZus{}summary}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{biases1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{biases}\PY{p}{)}
+
+        \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dropout1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{hidden1\PYZus{}dropped} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{dropout}\PY{p}{(}\PY{n}{hidden1}\PY{p}{,} \PY{n}{keep\PYZus{}prob\PYZus{}}\PY{p}{)}
+
+        \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hidden2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{weights} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{Variable}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{truncated\PYZus{}normal}\PY{p}{(}\PY{p}{[}\PY{n}{d\PYZus{}hid1\PYZus{}feat}\PY{p}{,} \PY{n}{d\PYZus{}hid2\PYZus{}feat}\PY{p}{]}\PY{p}{,}
+                                                      \PY{n}{stddev}\PY{o}{=}\PY{l+m+mi}{1} \PY{o}{/} \PY{n}{sqrt}\PY{p}{(}\PY{n+nb}{float}\PY{p}{(}\PY{n}{d\PYZus{}hid2\PYZus{}feat}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{weights}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+            \PY{n}{biases} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{Variable}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{[}\PY{n}{d\PYZus{}hid2\PYZus{}feat}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{biases}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+            \PY{n}{hidden2} \PY{o}{=} \PY{n}{activation\PYZus{}fn}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{matmul}\PY{p}{(}\PY{n}{hidden1\PYZus{}dropped}\PY{p}{,} \PY{n}{weights}\PY{p}{)} \PY{o}{+} \PY{n}{biases}\PY{p}{)}
+            \PY{n}{tf}\PY{o}{.}\PY{n}{histogram\PYZus{}summary}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{weights2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{weights}\PY{p}{)}
+            \PY{n}{tf}\PY{o}{.}\PY{n}{histogram\PYZus{}summary}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{biases2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{biases}\PY{p}{)}
+
+        \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{output}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{weights} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{Variable}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{truncated\PYZus{}normal}\PY{p}{(}\PY{p}{[}\PY{n}{d\PYZus{}hid2\PYZus{}feat}\PY{p}{,} \PY{n}{d\PYZus{}feat}\PY{p}{]}\PY{p}{,} \PY{n}{stddev}\PY{o}{=}\PY{l+m+mi}{1} \PY{o}{/} \PY{n}{sqrt}\PY{p}{(}\PY{n+nb}{float}\PY{p}{(}\PY{n}{d\PYZus{}feat}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+                                  \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{weights}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+            \PY{n}{biases} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{Variable}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{[}\PY{n}{d\PYZus{}feat}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{biases}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+            \PY{n}{outputs} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{matmul}\PY{p}{(}\PY{n}{hidden2}\PY{p}{,} \PY{n}{weights}\PY{p}{)} \PY{o}{+} \PY{n}{biases}
+            \PY{n}{tf}\PY{o}{.}\PY{n}{histogram\PYZus{}summary}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{weights3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{weights}\PY{p}{)}
+            \PY{n}{tf}\PY{o}{.}\PY{n}{histogram\PYZus{}summary}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{biases3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{biases}\PY{p}{)}
+            \PY{n}{tf}\PY{o}{.}\PY{n}{histogram\PYZus{}summary}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{errors2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{outputs} \PY{o}{\PYZhy{}} \PY{n}{features}\PY{p}{)}
+
+    \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{loss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n}{loss} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{reduce\PYZus{}mean}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{squared\PYZus{}difference}\PY{p}{(}\PY{n}{outputs}\PY{p}{,} \PY{n}{features}\PY{p}{)}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mse}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{tf}\PY{o}{.}\PY{n}{histogram\PYZus{}summary}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{loss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{loss}\PY{p}{)}
+
+    \PY{n}{optimizer} \PY{o}{=} \PY{n}{training\PYZus{}fn}\PY{p}{(}\PY{l+m+mf}{0.01}\PY{p}{)}
+    \PY{n}{train\PYZus{}op} \PY{o}{=} \PY{n}{optimizer}\PY{o}{.}\PY{n}{minimize}\PY{p}{(}\PY{n}{loss}\PY{p}{)}
+
+    \PY{k}{with} \PY{n}{tf}\PY{o}{.}\PY{n}{name\PYZus{}scope}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{validation}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n}{val\PYZus{}op} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{reduce\PYZus{}mean}\PY{p}{(}\PY{n}{tf}\PY{o}{.}\PY{n}{squared\PYZus{}difference}\PY{p}{(}\PY{n}{outputs}\PY{p}{,} \PY{n}{features}\PY{p}{)}\PY{p}{)}
+        \PY{n}{tf}\PY{o}{.}\PY{n}{scalar\PYZus{}summary}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{validation}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{val\PYZus{}op}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Build the summary operation based on the TF collection of Summaries.}
+    \PY{n}{summary\PYZus{}op} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{merge\PYZus{}all\PYZus{}summaries}\PY{p}{(}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Add the variable initializer Op.}
+    \PY{n}{init} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{initialize\PYZus{}all\PYZus{}variables}\PY{p}{(}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Create a saver for writing training checkpoints.}
+    \PY{n}{saver} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{train}\PY{o}{.}\PY{n}{Saver}\PY{p}{(}\PY{n}{sharded}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Create a session for training g1}
+    \PY{n}{sess2} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{Session}\PY{p}{(}\PY{n}{graph}\PY{o}{=}\PY{n}{g2}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Instantiate a SummaryWriter to output summaries and the Graph.}
+    \PY{n}{summary\PYZus{}writer} \PY{o}{=} \PY{n}{tf}\PY{o}{.}\PY{n}{train}\PY{o}{.}\PY{n}{SummaryWriter}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{../writers/2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{sess2}\PY{o}{.}\PY{n}{graph}\PY{p}{)}
+
+    \PY{n}{tf}\PY{o}{.}\PY{n}{train}\PY{o}{.}\PY{n}{write\PYZus{}graph}\PY{p}{(}\PY{n}{g2}\PY{o}{.}\PY{n}{as\PYZus{}graph\PYZus{}def}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{../writers/2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{g2.pbtxt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} 
+	
+    \PY{c+c1}{\PYZsh{} Run the Op to initialize the variables.}
+    \PY{n}{sess2}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{n}{init}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} training 2}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{301}\PY{p}{)}\PY{p}{:}
+        \PY{c+c1}{\PYZsh{} randomly grab a training set}
+        \PY{n}{idx\PYZus{}tr} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{choice}\PY{p}{(}\PY{n}{T} \PY{o}{\PYZhy{}} \PY{l+m+mi}{20000}\PY{p}{,} \PY{l+m+mi}{10000}\PY{p}{,} \PY{n}{replace}\PY{o}{=}\PY{n+nb+bp}{False}\PY{p}{)}
+       	\PY{n}{idx\PYZus{}te} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{choice}\PY{p}{(}\PY{l+m+mi}{20000}\PY{p}{,} \PY{l+m+mi}{10000}\PY{p}{,} \PY{n}{replace}\PY{o}{=}\PY{n+nb+bp}{False}\PY{p}{)} \PY{o}{+} \PY{n}{T} \PY{o}{\PYZhy{}} \PY{l+m+mi}{20000}
+        \PY{k}{if} \PY{n}{i} \PY{o}{\PYZpc{}} \PY{l+m+mi}{50} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}  \PY{c+c1}{\PYZsh{} every 10th step we run our validation step to see how we\PYZsq{}re doing}
+            \PY{n}{f\PYZus{}dict} \PY{o}{=} \PY{p}{\PYZob{}}\PY{n}{neural\PYZus{}}\PY{p}{:} \PY{n}{neural}\PY{p}{(}\PY{n}{idx\PYZus{}te}\PY{p}{)}\PY{p}{,} \PY{n}{velocities\PYZus{}}\PY{p}{:} \PY{n}{velocities}\PY{p}{(}\PY{n}{idx\PYZus{}te}\PY{p}{)}\PY{p}{,} \PY{n}{keep\PYZus{}prob\PYZus{}}\PY{p}{:} \PY{n}{keep\PYZus{}prob2}\PY{p}{\PYZcb{}}
+            \PY{p}{[}\PY{n}{summary}\PY{p}{,} \PY{n}{vali}\PY{p}{]} \PY{o}{=} \PY{n}{sess2}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{p}{[}\PY{n}{summary\PYZus{}op}\PY{p}{,} \PY{n}{val\PYZus{}op}\PY{p}{]}\PY{p}{,} \PY{n}{feed\PYZus{}dict}\PY{o}{=}\PY{n}{f\PYZus{}dict}\PY{p}{)}
+            \PY{n}{summary\PYZus{}writer}\PY{o}{.}\PY{n}{add\PYZus{}summary}\PY{p}{(}\PY{n}{summary}\PY{p}{,} \PY{n}{i}\PY{p}{)}
+            \PY{k}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Accuracy at step }\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{: }\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{vali}\PY{p}{)}\PY{p}{)}
+            \PY{n}{save\PYZus{}path} \PY{o}{=} \PY{n}{saver}\PY{o}{.}\PY{n}{save}\PY{p}{(}\PY{n}{sess2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{../writers/2/model.ckpt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{k}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Model saved in file: }\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s2}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{n}{save\PYZus{}path}\PY{p}{)}
+        \PY{k}{else}\PY{p}{:}  \PY{c+c1}{\PYZsh{} if we\PYZsq{}re not on a 10th step then we do a regular training step}
+            \PY{n}{f\PYZus{}dict} \PY{o}{=} \PY{p}{\PYZob{}}\PY{n}{neural\PYZus{}}\PY{p}{:} \PY{n}{neural}\PY{p}{(}\PY{n}{idx\PYZus{}tr}\PY{p}{)}\PY{p}{,} \PY{n}{velocities\PYZus{}}\PY{p}{:} \PY{n}{velocities}\PY{p}{(}\PY{n}{idx\PYZus{}tr}\PY{p}{)}\PY{p}{,} \PY{n}{keep\PYZus{}prob\PYZus{}}\PY{p}{:} \PY{n}{keep\PYZus{}prob2}\PY{p}{\PYZcb{}}
+            \PY{p}{[}\PY{n}{summary}\PY{p}{,} \PY{n}{\PYZus{}}\PY{p}{]} \PY{o}{=} \PY{n}{sess2}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{p}{[}\PY{n}{summary\PYZus{}op}\PY{p}{,} \PY{n}{train\PYZus{}op}\PY{p}{]}\PY{p}{,} \PY{n}{feed\PYZus{}dict}\PY{o}{=}\PY{n}{f\PYZus{}dict}\PY{p}{)}
+            \PY{n}{summary\PYZus{}writer}\PY{o}{.}\PY{n}{add\PYZus{}summary}\PY{p}{(}\PY{n}{summary}\PY{p}{,} \PY{n}{i}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} collect model parameters}
+\PY{n}{f\PYZus{}hidden1\PYZus{}weights} \PY{o}{=} \PY{n}{sess1}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hidden1/weights:0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{f\PYZus{}hidden1\PYZus{}biases} \PY{o}{=} \PY{n}{sess1}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hidden1/biases:0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{f\PYZus{}hidden2\PYZus{}weights} \PY{o}{=} \PY{n}{sess1}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hidden2/weights:0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{f\PYZus{}hidden2\PYZus{}biases} \PY{o}{=} \PY{n}{sess1}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hidden2/biases:0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{f\PYZus{}hidden3\PYZus{}weights} \PY{o}{=} \PY{n}{sess1}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hidden3/weights:0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{f\PYZus{}hidden3\PYZus{}biases} \PY{o}{=} \PY{n}{sess1}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hidden3/biases:0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{g\PYZus{}hidden1\PYZus{}weights} \PY{o}{=} \PY{n}{sess2}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{map\PYZus{}to\PYZus{}features/hidden1/weights:0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{g\PYZus{}hidden1\PYZus{}biases} \PY{o}{=} \PY{n}{sess2}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{map\PYZus{}to\PYZus{}features/hidden1/biases:0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{g\PYZus{}hidden2\PYZus{}weights} \PY{o}{=} \PY{n}{sess2}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{map\PYZus{}to\PYZus{}features/hidden2/weights:0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{g\PYZus{}hidden2\PYZus{}biases} \PY{o}{=} \PY{n}{sess2}\PY{o}{.}\PY{n}{run}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{map\PYZus{}to\PYZus{}features/hidden2/biases:0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} save model parameters}
+\PY{n}{np}\PY{o}{.}\PY{n}{savez}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{neural\PYZus{}net\PYZus{}parameters}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{f\PYZus{}hidden1\PYZus{}weights}\PY{o}{=}\PY{n}{f\PYZus{}hidden1\PYZus{}weights}\PY{p}{,} \PY{n}{f\PYZus{}hidden1\PYZus{}biases}\PY{o}{=}\PY{n}{f\PYZus{}hidden1\PYZus{}biases}\PY{p}{,}
+         \PY{n}{f\PYZus{}hidden2\PYZus{}weights}\PY{o}{=}\PY{n}{f\PYZus{}hidden2\PYZus{}weights}\PY{p}{,} \PY{n}{f\PYZus{}hidden2\PYZus{}biases}\PY{o}{=}\PY{n}{f\PYZus{}hidden2\PYZus{}biases}\PY{p}{,}
+         \PY{n}{f\PYZus{}hidden3\PYZus{}weights}\PY{o}{=}\PY{n}{f\PYZus{}hidden3\PYZus{}weights}\PY{p}{,} \PY{n}{f\PYZus{}hidden3\PYZus{}biases}\PY{o}{=}\PY{n}{f\PYZus{}hidden3\PYZus{}biases}\PY{p}{,}
+         \PY{n}{g\PYZus{}hidden1\PYZus{}weights}\PY{o}{=}\PY{n}{g\PYZus{}hidden1\PYZus{}weights}\PY{p}{,} \PY{n}{g\PYZus{}hidden1\PYZus{}biases}\PY{o}{=}\PY{n}{g\PYZus{}hidden1\PYZus{}biases}\PY{p}{,}
+         \PY{n}{g\PYZus{}hidden2\PYZus{}weights}\PY{o}{=}\PY{n}{g\PYZus{}hidden2\PYZus{}weights}\PY{p}{,} \PY{n}{g\PYZus{}hidden2\PYZus{}biases}\PY{o}{=}\PY{n}{g\PYZus{}hidden2\PYZus{}biases}\PY{p}{)}
+
+
+
+\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{look at output with:}
+\PY{l+s+sd}{tensorboard \PYZhy{}\PYZhy{}logdir=../writers/1}
+\PY{l+s+sd}{tensorboard \PYZhy{}\PYZhy{}logdir=../writers/2}
+\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\end{Verbatim}
+
+\end{document}
